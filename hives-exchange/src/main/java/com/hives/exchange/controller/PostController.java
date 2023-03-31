@@ -7,6 +7,7 @@ import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.R;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,17 @@ import com.hives.exchange.service.PostService;
 public class PostController {
     @Autowired
     private PostService postService;
+
+    @Value("${person.name}")
+    private String name;
+
+    @Value("${person.age}")
+    private Integer age;
+
+    @RequestMapping("/test")
+    public R test(){
+        return R.ok().put("name",name).put("age",age);
+    }
 
     /**
      * 列表

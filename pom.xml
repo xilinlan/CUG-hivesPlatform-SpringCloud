@@ -15,6 +15,7 @@
         <module>hives-user</module>
         <module>hives-exchange</module>
         <module>hives-common</module>
+        <module>hives-gateway</module>
     </modules>
 
 </project>
