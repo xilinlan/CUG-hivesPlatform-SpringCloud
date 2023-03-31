@@ -1,0 +1,25 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 124.223.20.95:8848
+    gateway:
+      routes:
+        - id: user_route
+          uri: lb://hives-user
+          predicates:
+            - Path=/api/user/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+        - id: exchange_route
+          uri: lb://hives-exchange
+          predicates:
+            - Path=/api/exchange/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+  application:
+    name: hives-gateway
+
+server:
+  port: 88
