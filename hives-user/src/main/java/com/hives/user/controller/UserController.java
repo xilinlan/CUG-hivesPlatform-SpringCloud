@@ -36,6 +36,32 @@ public class UserController {
         return R.ok().put("user",userEntity);
     }
 
+    @GetMapping("/sendCode")
+    public R sendCode(@RequestParam String email){
+        //TODO 接收到请求，生成验证码，当验证码生成并发送到邮件后，返回ok
+        System.out.println(email);
+        return R.ok();
+    }
+
+    @GetMapping("/validate")
+    public R validate(@RequestParam String code){
+        //TODO 接收到请求，验证收到的验证码是否符合刚才生成的验证码并返回结果
+        return R.ok().put("isTrue",null);
+    }
+
+    @PostMapping("/register")
+    public R register(@RequestBody UserEntity user){
+        //TODO 接收注册信息，将其存储到数据库表中
+        return R.ok();
+    }
+
+    @PostMapping("/checkEmail")
+    public R checkEmail(@RequestBody UserEntity user){
+        //TODO 接收前端传来的email（存储在user.email属性中），查询数据库表该邮箱是否存在
+
+        return R.ok().put("checkCode",null);
+    }
+
     /**
      * 列表
      */
