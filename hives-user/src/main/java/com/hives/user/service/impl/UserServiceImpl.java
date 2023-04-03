@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hives.user.dao.UserDao;
 import com.hives.user.entity.UserEntity;
 import com.hives.user.service.UserService;
+import org.springframework.util.DigestUtils;
 
 
 @Service("userService")
@@ -25,6 +26,16 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
         );
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public UserEntity login(UserEntity user) {
+        String password = user.getPassword();
+        System.out.println(user.getEmail());
+        System.out.println(user.getPassword());
+        password = DigestUtils.md5DigestAsHex(password.getBytes());
+        UserEntity userEntity = this.getOne(new QueryWrapper<UserEntity>().eq("email", user.getEmail()).eq("password", password));
+        return userEntity;
     }
 
 }

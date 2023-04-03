@@ -3,15 +3,12 @@ package com.hives.user.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.R;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.hives.user.entity.UserEntity;
 import com.hives.user.service.UserService;
@@ -31,6 +28,39 @@ import com.hives.user.service.UserService;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @PostMapping("/login")
+    public R login(@RequestBody UserEntity user)
+    {
+        UserEntity userEntity=userService.login(user);
+        return R.ok().put("user",userEntity);
+    }
+
+    @GetMapping("/sendCode")
+    public R sendCode(@RequestParam String email){
+        //TODO 接收到请求，生成验证码，当验证码生成并发送到邮件后，返回ok
+        System.out.println(email);
+        return R.ok();
+    }
+
+    @GetMapping("/validate")
+    public R validate(@RequestParam String code){
+        //TODO 接收到请求，验证收到的验证码是否符合刚才生成的验证码并返回结果
+        return R.ok().put("isTrue",null);
+    }
+
+    @PostMapping("/register")
+    public R register(@RequestBody UserEntity user){
+        //TODO 接收注册信息，将其存储到数据库表中
+        return R.ok();
+    }
+
+    @PostMapping("/checkEmail")
+    public R checkEmail(@RequestBody UserEntity user){
+        //TODO 接收前端传来的email（存储在user.email属性中），查询数据库表该邮箱是否存在
+
+        return R.ok().put("checkCode",null);
+    }
 
     /**
      * 列表
