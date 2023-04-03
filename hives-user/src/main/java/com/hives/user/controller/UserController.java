@@ -3,15 +3,12 @@ package com.hives.user.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.R;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.hives.user.entity.UserEntity;
 import com.hives.user.service.UserService;
@@ -31,6 +28,13 @@ import com.hives.user.service.UserService;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @PostMapping("/login")
+    public R login(@RequestBody UserEntity user)
+    {
+        UserEntity userEntity=userService.login(user);
+        return R.ok().put("user",userEntity);
+    }
 
     /**
      * 列表
