@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.hives.common.constant.UserConstant;
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.R;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -38,9 +39,9 @@ public class UserController {
 
     @GetMapping("/sendCode")
     public R sendCode(@RequestParam String email){
-        //TODO 接收到请求，生成验证码，当验证码生成并发送到邮件后，返回ok
+        //TODO 接收到请求，检查邮箱是否合法以及数据库中已经存在邮箱，生成验证码，当验证码生成并发送到邮件后，返回ok
         System.out.println(email);
-        return R.ok();
+        return R.ok().put("code", UserConstant.EmailEnum.SUCCESS);
     }
 
     @GetMapping("/validate")
@@ -53,13 +54,6 @@ public class UserController {
     public R register(@RequestBody UserEntity user){
         //TODO 接收注册信息，将其存储到数据库表中
         return R.ok();
-    }
-
-    @PostMapping("/checkEmail")
-    public R checkEmail(@RequestBody UserEntity user){
-        //TODO 接收前端传来的email（存储在user.email属性中），查询数据库表该邮箱是否存在
-
-        return R.ok().put("checkCode",null);
     }
 
     /**
