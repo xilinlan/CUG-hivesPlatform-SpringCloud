@@ -47,17 +47,6 @@ public class UserController {
         return R.ok().put("user",userEntity);
     }
 
-    /**
-     * 发送验证码
-     * @author xilinlan
-     * @param email 邮箱
-     * @return R
-     */
-    @PostMapping("/sendCode")
-    public R sendCode(@RequestParam String email, HttpServletRequest request){
-        // 接收到请求，生成验证码，当验证码生成并发送到邮件后，返回ok
-        Boolean status = userService.sendCode(email, request);
-        return Objects.requireNonNull(R.ok().put("status", UserConstant.EmailEnum.SUCCESS.getCode())).put("isSend", status);
     }
 
     /**
@@ -77,9 +66,6 @@ public class UserController {
     @PostMapping("/register")
     public R register(@RequestBody UserEntity user){
         //TODO 接收注册信息，将其存储到数据库表中
-
-        return R.ok();
-    }
 
     /**
      * 列表
