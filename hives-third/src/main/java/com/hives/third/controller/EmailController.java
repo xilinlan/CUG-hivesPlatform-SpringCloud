@@ -27,7 +27,7 @@ public class EmailController {
 
     @PostMapping("/validate/sendCode")
     public R sendCode(@RequestParam("email_code") String code,@RequestParam("email") String email){
-        //TODO 发送邮件
+        //发送邮件
         //接收从用户服务中传过来的code，交给第三方服务发送邮件
         //邮件发送结果
         // 配置邮箱发送的基本参数

@@ -37,11 +37,20 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
     @Override
     public UserEntity login(UserEntity user) {
         String password = user.getPassword();
-        System.out.println(user.getEmail());
-        System.out.println(user.getPassword());
+//        System.out.println(user.getEmail());
+//        System.out.println(user.getPassword());
         password = DigestUtils.md5DigestAsHex(password.getBytes());
         UserEntity userEntity = this.getOne(new QueryWrapper<UserEntity>().eq("email", user.getEmail()).eq("password", password));
         return userEntity;
+    }
+
+    @Override
+    public UserEntity register(UserEntity user) {
+        String password = user.getPassword();
+        password = DigestUtils.md5DigestAsHex(password.getBytes());
+        user.setPassword(password);
+        this.save(user);
+        return user;
     }
 
 }

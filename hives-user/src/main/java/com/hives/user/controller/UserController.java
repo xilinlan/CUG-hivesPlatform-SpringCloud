@@ -52,6 +52,18 @@ public class UserController {
     }
 
     /**
+     * 注册服务
+     * @param user
+     * @return
+     */
+    @PostMapping("/register")
+    public R register(@RequestBody UserEntity user) {
+        // 接收注册信息，将其存储到数据库表中
+        userService.register(user);
+        return R.ok();
+    }
+
+    /**
      * @author xilinlan
      * 生成code，然后发给第三方服务包
      * @param email
@@ -87,16 +99,7 @@ public class UserController {
         }
     }
 
-    /**
-     * 注册服务
-     * @param user
-     * @return
-     */
-    @PostMapping("/register")
-    public R register(@RequestBody UserEntity user) {
-        //TODO 接收注册信息，将其存储到数据库表中
-        return R.ok();
-    }
+
     /**
      * 列表
      */
