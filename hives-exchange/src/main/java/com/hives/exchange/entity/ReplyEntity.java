@@ -40,6 +40,12 @@ public class ReplyEntity implements Serializable {
 	 * 创建日期
 	 */
 	private Date createTime;
+
+	/**
+	 * 喜欢
+	 */
+	private Long likes;
+
 	/**
 	 * 回复人的用户id
 	 */

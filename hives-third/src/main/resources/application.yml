@@ -1,0 +1,12 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 124.223.20.95:8848
+  application:
+    name: hives-third
+  redis:
+    host: 1.117.105.39
+    port: 6124
+server:
+  port: 13000
