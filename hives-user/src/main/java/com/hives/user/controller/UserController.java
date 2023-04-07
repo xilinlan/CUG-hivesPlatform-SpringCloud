@@ -42,7 +42,7 @@ public class UserController {
     /**
      * 登录服务
      * @param user
-     * @return
+     * @return R
      */
     @PostMapping("/login")
     public R login(@RequestBody UserEntity user)
@@ -52,42 +52,53 @@ public class UserController {
     }
 
     /**
-     * 生成code，然后发给第三方服务包
-     * @param email
-     * @return
-     */
-    @GetMapping("/sendCode")
-    public R sendCode(@RequestParam String email){
-        //TODO 接收到请求，检查邮箱是否合法以及数据库中已经存在邮箱，生成验证码，当验证码生成并发送到邮件后，返回ok
-        System.out.println(email);
-        String code="1234";
-        stringRedisTemplate.opsForValue().set("code",code,60 * 10, TimeUnit.SECONDS);
-        emailFeignService.sendCode(code);
-        return R.ok().put("code", UserConstant.EmailEnum.SUCCESS);
-    }
-
-    /**
-     * 接收前端发过来的code，比对验证结果
-     * @param code
-     * @return
-     */
-    @GetMapping("/validate")
-    public R validate(@RequestParam String code){
-        //TODO 接收到请求，从redis中取出code，比对收到的验证码是否符合刚才生成的验证码并返回结果
-        String redis_code = stringRedisTemplate.opsForValue().get("code");
-
-        return R.ok().put("correct",null);
-
-    }
-
-    /**
      * 注册服务
      * @param user
      * @return
      */
     @PostMapping("/register")
-    public R register(@RequestBody UserEntity user){
-        //TODO 接收注册信息，将其存储到数据库表中
+    public R register(@RequestBody UserEntity user) {
+        // 接收注册信息，将其存储到数据库表中
+        userService.register(user);
+        return R.ok();
+    }
+
+    /**
+     * @author xilinlan
+     * 生成code，然后发给第三方服务包
+     * @param email
+     * @return R
+     */
+    @PostMapping("/sendCode")
+    public R sendCode(@RequestParam String email){
+        // 接收到请求，检查邮箱是否合法以及数据库中已经存在邮箱，生成验证码，当验证码生成并发送到邮件后，返回ok
+        System.out.println(email);
+        // 生成验证码 6位
+        String verifyCode = String.valueOf((Math.random()*9+1)*100000).substring(0,6);
+        // 将验证码存入redis
+        stringRedisTemplate.opsForValue().set(email,verifyCode,60 * 10, TimeUnit.SECONDS);
+        // 调用第三方服务包将验证码发送到邮箱
+        emailFeignService.sendCode(verifyCode,email);
+        return R.ok().put("code", UserConstant.EmailEnum.SUCCESS);
+    }
+
+    /**
+     * @author xilinlan
+     * 接收前端发过来的code，比对验证结果
+     * @param code
+     * @return R
+     */
+    @PostMapping("/validate")
+    public R validate(@RequestParam String code,@RequestParam String email){
+        // 接收到请求，从redis中取出code，比对收到的验证码是否符合刚才生成的验证码并返回结果
+        String redis_code = stringRedisTemplate.opsForValue().get(email);
+        if(code.equals(redis_code)){
+            return R.ok().put("correct",UserConstant.VailateEnum.SUCCESS);
+        }else {
+            return R.ok().put("correct",UserConstant.VailateEnum.FAIL);
+        }
+    }
+
 
     /**
      * 列表
