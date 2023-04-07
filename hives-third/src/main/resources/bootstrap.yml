@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: hives-third
+  cloud:
+    nacos:
+      config:
+        server-addr: 124.223.20.95:8848
+        file-extension: yaml
+  profiles:
+    active: dev
