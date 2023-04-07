@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.hives.common.utils.PageUtils;
 import com.hives.user.entity.UserEntity;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
@@ -18,5 +19,9 @@ public interface UserService extends IService<UserEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     UserEntity login(UserEntity user);
+
+    Boolean sendCode(String email, HttpServletRequest request);
+
+
 }
 

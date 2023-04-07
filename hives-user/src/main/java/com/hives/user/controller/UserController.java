@@ -2,21 +2,21 @@ package com.hives.user.controller;
 
 import java.util.Arrays;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
+import java.util.concurrent.TimeUnit;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hives.common.constant.UserConstant;
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.R;
+
 import com.hives.user.feign.EmailFeignService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
-
 import com.hives.user.entity.UserEntity;
 import com.hives.user.service.UserService;
-
 import javax.annotation.Resource;
 
 
@@ -77,6 +77,7 @@ public class UserController {
         String redis_code = stringRedisTemplate.opsForValue().get("code");
 
         return R.ok().put("correct",null);
+
     }
 
     /**
@@ -87,8 +88,6 @@ public class UserController {
     @PostMapping("/register")
     public R register(@RequestBody UserEntity user){
         //TODO 接收注册信息，将其存储到数据库表中
-        return R.ok();
-    }
 
     /**
      * 列表
