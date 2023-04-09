@@ -89,7 +89,7 @@ public class UserController {
         stringRedisTemplate.opsForValue().set(email,verifyCode,60 * 10, TimeUnit.SECONDS);
         // 调用第三方服务包将验证码发送到邮箱
         emailFeignService.sendCode(verifyCode,email);
-        return R.ok().put("code", UserConstant.EmailEnum.SUCCESS);
+        return R.ok().put("sendStatus", UserConstant.EmailEnum.SUCCESS.getCode());
     }
 
     /**
