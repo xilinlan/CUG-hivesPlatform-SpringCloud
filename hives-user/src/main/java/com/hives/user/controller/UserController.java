@@ -3,6 +3,7 @@ package com.hives.user.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hives.common.constant.UserConstant;
@@ -14,6 +15,7 @@ import com.hives.user.feign.EmailFeignService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 import com.hives.user.entity.UserEntity;
 import com.hives.user.service.UserService;
@@ -48,7 +50,15 @@ public class UserController {
     public R login(@RequestBody UserEntity user)
     {
         UserEntity userEntity=userService.login(user);
-        return R.ok().put("user",userEntity);
+        if (userEntity==null)
+        {
+            return R.ok().put("loginStatus", UserConstant.LoginEnum.FAIL.getCode()).put("msg",UserConstant.LoginEnum.FAIL.getMsg());
+        }
+        else
+        {
+            return R.ok().put("loginStatus", UserConstant.LoginEnum.SUCCESS.getCode()).put("msg",UserConstant.LoginEnum.SUCCESS.getMsg());
+        }
+
     }
 
     /**
@@ -60,7 +70,7 @@ public class UserController {
     public R register(@RequestBody UserEntity user) {
         // 接收注册信息，将其存储到数据库表中
         userService.register(user);
-        return R.ok();
+        return R.ok().put("regStatus",UserConstant.RegisterEnum.SUCCESS).put("msg",UserConstant.RegisterEnum.SUCCESS.getMsg());
     }
 
     /**
@@ -69,7 +79,7 @@ public class UserController {
      * @param email
      * @return R
      */
-    @PostMapping("/sendCode")
+    @GetMapping("/sendCode")
     public R sendCode(@RequestParam String email){
         // 接收到请求，检查邮箱是否合法以及数据库中已经存在邮箱，生成验证码，当验证码生成并发送到邮件后，返回ok
         System.out.println(email);
@@ -79,7 +89,7 @@ public class UserController {
         stringRedisTemplate.opsForValue().set(email,verifyCode,60 * 10, TimeUnit.SECONDS);
         // 调用第三方服务包将验证码发送到邮箱
         emailFeignService.sendCode(verifyCode,email);
-        return R.ok().put("code", UserConstant.EmailEnum.SUCCESS);
+        return R.ok().put("sendStatus", UserConstant.EmailEnum.SUCCESS.getCode()).put("msg",UserConstant.EmailEnum.SUCCESS.getMsg());
     }
 
     /**
@@ -88,14 +98,14 @@ public class UserController {
      * @param code
      * @return R
      */
-    @PostMapping("/validate")
+    @GetMapping("/validate")
     public R validate(@RequestParam String code,@RequestParam String email){
         // 接收到请求，从redis中取出code，比对收到的验证码是否符合刚才生成的验证码并返回结果
         String redis_code = stringRedisTemplate.opsForValue().get(email);
         if(code.equals(redis_code)){
-            return R.ok().put("correct",UserConstant.VailateEnum.SUCCESS);
+            return R.ok().put("correct",UserConstant.ValidateEnum.SUCCESS.getCode()).put("msg",UserConstant.ValidateEnum.SUCCESS.getMsg());
         }else {
-            return R.ok().put("correct",UserConstant.VailateEnum.FAIL);
+            return R.ok().put("correct",UserConstant.ValidateEnum.FAIL.getCode()).put("msg",UserConstant.ValidateEnum.FAIL.getMsg());
         }
     }
 

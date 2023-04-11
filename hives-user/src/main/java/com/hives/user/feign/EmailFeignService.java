@@ -15,7 +15,7 @@ import java.util.Map;
 @FeignClient("hives-third")
 public interface EmailFeignService {
 
-    @PostMapping("/validate/sendCode")
+    @GetMapping("/validate/sendCode")
     R sendCode(@RequestParam("email_code") String code,@RequestParam("email") String email);
 
 

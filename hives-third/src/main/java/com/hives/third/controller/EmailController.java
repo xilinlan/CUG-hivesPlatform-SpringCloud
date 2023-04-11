@@ -25,7 +25,7 @@ public class EmailController {
     @Autowired
     private MailConfig mailConfig;
 
-    @PostMapping("/validate/sendCode")
+    @GetMapping("/validate/sendCode")
     public R sendCode(@RequestParam("email_code") String code,@RequestParam("email") String email){
         //发送邮件
         //接收从用户服务中传过来的code，交给第三方服务发送邮件
