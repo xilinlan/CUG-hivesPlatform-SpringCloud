@@ -42,4 +42,25 @@ public class UserConstant {
             return msg;
         }
     }
+
+    public enum LoginEnum{
+        FAIL(0,"登录失败"),SUCCESS(1,"登录成功");
+
+        LoginEnum(int code,String msg){
+            this.code=code;
+            this.msg=msg;
+        }
+
+        private final int code;
+
+        private final String msg;
+
+        public int getCode() {
+            return code;
+        }
+
+        public String getMsg() {
+            return msg;
+        }
+    }
 }
