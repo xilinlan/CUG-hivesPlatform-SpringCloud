@@ -52,11 +52,11 @@ public class UserController {
         UserEntity userEntity=userService.login(user);
         if (userEntity==null)
         {
-            return R.ok().put("loginStatus", UserConstant.LoginEnum.FAIL.getCode());
+            return R.ok().put("loginStatus", UserConstant.LoginEnum.FAIL.getCode()).put("msg",UserConstant.LoginEnum.FAIL.getMsg());
         }
         else
         {
-            return R.ok().put("loginStatus", UserConstant.LoginEnum.SUCCESS.getCode());
+            return R.ok().put("loginStatus", UserConstant.LoginEnum.SUCCESS.getCode()).put("msg",UserConstant.LoginEnum.SUCCESS.getMsg());
         }
 
     }
@@ -70,7 +70,7 @@ public class UserController {
     public R register(@RequestBody UserEntity user) {
         // 接收注册信息，将其存储到数据库表中
         userService.register(user);
-        return R.ok();
+        return R.ok().put("regStatus",UserConstant.RegisterEnum.SUCCESS).put("msg",UserConstant.RegisterEnum.SUCCESS.getMsg());
     }
 
     /**
@@ -89,7 +89,7 @@ public class UserController {
         stringRedisTemplate.opsForValue().set(email,verifyCode,60 * 10, TimeUnit.SECONDS);
         // 调用第三方服务包将验证码发送到邮箱
         emailFeignService.sendCode(verifyCode,email);
-        return R.ok().put("sendStatus", UserConstant.EmailEnum.SUCCESS.getCode());
+        return R.ok().put("sendStatus", UserConstant.EmailEnum.SUCCESS.getCode()).put("msg",UserConstant.EmailEnum.SUCCESS.getMsg());
     }
 
     /**
@@ -103,9 +103,9 @@ public class UserController {
         // 接收到请求，从redis中取出code，比对收到的验证码是否符合刚才生成的验证码并返回结果
         String redis_code = stringRedisTemplate.opsForValue().get(email);
         if(code.equals(redis_code)){
-            return R.ok().put("correct",UserConstant.VailateEnum.SUCCESS);
+            return R.ok().put("correct",UserConstant.ValidateEnum.SUCCESS.getCode()).put("msg",UserConstant.ValidateEnum.SUCCESS.getMsg());
         }else {
-            return R.ok().put("correct",UserConstant.VailateEnum.FAIL);
+            return R.ok().put("correct",UserConstant.ValidateEnum.FAIL.getCode()).put("msg",UserConstant.ValidateEnum.FAIL.getMsg());
         }
     }
 
