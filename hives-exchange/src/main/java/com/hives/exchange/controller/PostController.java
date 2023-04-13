@@ -1,12 +1,15 @@
 package com.hives.exchange.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import com.hives.common.constant.PostConstant;
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.R;
+import com.hives.exchange.dto.PostDto;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -68,9 +71,8 @@ public class PostController {
      * 保存
      */
     @PostMapping("/save")
-    //@RequiresPermissions("exchange:post:save")
-    public R save(@RequestBody PostEntity post){
-		postService.save(post);
+    public R save(@RequestBody PostDto post){
+        postService.savePost(post);
 
         return R.ok().put("postStatus", PostConstant.PostEnum.SUCCESS.getCode()).put("msg",PostConstant.PostEnum.SUCCESS.getMsg());
     }
@@ -79,7 +81,6 @@ public class PostController {
      * 修改
      */
     @RequestMapping("/update")
-    //@RequiresPermissions("exchange:post:update")
     public R update(@RequestBody PostEntity post){
 		postService.updateById(post);
 
@@ -92,6 +93,11 @@ public class PostController {
     @RequestMapping("/delete")
     //@RequiresPermissions("exchange:post:delete")
     public R delete(@RequestBody Long[] ids){
+        for (Long id:
+             ids) {
+            System.out.println(id);
+        }
+
 		postService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
