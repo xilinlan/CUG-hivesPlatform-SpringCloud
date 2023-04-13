@@ -3,16 +3,13 @@ package com.hives.exchange.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.hives.common.constant.PostConstant;
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.R;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.hives.exchange.entity.PostEntity;
 import com.hives.exchange.service.PostService;
@@ -70,12 +67,12 @@ public class PostController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
     //@RequiresPermissions("exchange:post:save")
     public R save(@RequestBody PostEntity post){
 		postService.save(post);
 
-        return R.ok();
+        return R.ok().put("postStatus", PostConstant.PostEnum.SUCCESS.getCode()).put("msg",PostConstant.PostEnum.SUCCESS.getMsg());
     }
 
     /**
