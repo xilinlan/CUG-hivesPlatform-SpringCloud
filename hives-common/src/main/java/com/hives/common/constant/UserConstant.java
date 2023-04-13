@@ -1,7 +1,10 @@
 package com.hives.common.constant;
 
+/**
+ * @author zhangtao
+ */
 public class UserConstant {
-    public enum EmailEnum{
+    public enum EmailEnum {
         ILLEGAL(0,"邮箱不合法"),SUCCESS(1,"成功发送"),EXISTS(2 ,"邮箱已存在");
 
         EmailEnum(int code,String msg){
