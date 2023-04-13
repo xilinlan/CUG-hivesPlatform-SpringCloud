@@ -2,6 +2,7 @@ package com.hives.exchange.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hives.common.utils.PageUtils;
+import com.hives.exchange.dto.PostDto;
 import com.hives.exchange.entity.PostEntity;
 
 import java.util.Map;
@@ -16,5 +17,7 @@ import java.util.Map;
 public interface PostService extends IService<PostEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    void savePost(PostDto post);
 }
 

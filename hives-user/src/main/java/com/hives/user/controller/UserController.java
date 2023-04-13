@@ -56,7 +56,7 @@ public class UserController {
         }
         else
         {
-            return R.ok().put("loginStatus", UserConstant.LoginEnum.SUCCESS.getCode()).put("msg",UserConstant.LoginEnum.SUCCESS.getMsg());
+            return R.ok().put("loginStatus", UserConstant.LoginEnum.SUCCESS.getCode()).put("msg",UserConstant.LoginEnum.SUCCESS.getMsg()).put("user",userEntity);
         }
 
     }
