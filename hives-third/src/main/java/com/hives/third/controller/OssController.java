@@ -30,7 +30,6 @@ public class OssController {
 
         String upToken = auth.uploadToken(bucket);
 
-        System.out.println(upToken);
         String format = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 
         String dir = format+"/";
