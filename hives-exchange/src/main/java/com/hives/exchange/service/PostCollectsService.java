@@ -16,5 +16,7 @@ import java.util.Map;
 public interface PostCollectsService extends IService<PostCollectsEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    PostCollectsEntity isCollect(Long userId, Long id);
 }
 

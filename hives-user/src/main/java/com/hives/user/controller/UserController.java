@@ -7,11 +7,13 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hives.common.constant.UserConstant;
+import com.hives.common.to.UserTo;
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.R;
 
 import com.hives.user.feign.EmailFeignService;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -125,7 +127,7 @@ public class UserController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @GetMapping("/info/{id}")
     //@RequiresPermissions("user:user:info")
     public R info(@PathVariable("id") Long id){
 		UserEntity user = userService.getById(id);
@@ -133,6 +135,14 @@ public class UserController {
         return R.ok().put("user", user);
     }
 
+    @GetMapping("/userInfo/{id}")
+    public UserTo userInfo(@PathVariable("id")Long id){
+        UserTo userTo=new UserTo();
+        UserEntity user=userService.getById(id);
+        BeanUtils.copyProperties(user,userTo);
+        System.out.println(userTo);
+        return userTo;
+    }
     /**
      * 保存
      */

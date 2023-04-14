@@ -50,8 +50,8 @@ public class PostController {
     @RequestMapping("/list")
     //@RequiresPermissions("exchange:post:list")
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = postService.queryPage(params);
-
+        PageUtils page =postService.queryPostPage(params);
+        // postService.queryPage(params);
         return R.ok().put("page", page);
     }
 

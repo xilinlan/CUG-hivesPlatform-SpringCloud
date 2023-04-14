@@ -19,5 +19,7 @@ public interface PostService extends IService<PostEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     void savePost(PostDto post);
+
+    PageUtils queryPostPage(Map<String, Object> params);
 }
 
