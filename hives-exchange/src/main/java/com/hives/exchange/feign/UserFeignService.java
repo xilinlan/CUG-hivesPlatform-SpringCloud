@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @Date: 2023/04/14/16:07
  * @Description:
  */
-@FeignClient("hives-user-zt")
+@FeignClient("hives-user")
 public interface UserFeignService {
     @GetMapping("/user/user/userInfo/{id}")
     UserTo userInfo(@PathVariable("id")Long id);
