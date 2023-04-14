@@ -27,4 +27,11 @@ public class PostCollectsServiceImpl extends ServiceImpl<PostCollectsDao, PostCo
         return new PageUtils(page);
     }
 
+    @Override
+    public PostCollectsEntity isCollect(Long userId, Long id) {
+        PostCollectsEntity postCollect = this.getOne(new QueryWrapper<PostCollectsEntity>().eq("user_id", userId).eq("post_id", id).eq("is_deleted", 0));
+
+        return postCollect;
+    }
+
 }

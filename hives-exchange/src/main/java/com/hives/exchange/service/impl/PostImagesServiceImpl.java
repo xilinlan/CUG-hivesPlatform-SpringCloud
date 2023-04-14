@@ -2,8 +2,13 @@ package com.hives.exchange.service.impl;
 
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.Query;
+import com.hives.exchange.entity.PostEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -25,6 +30,13 @@ public class PostImagesServiceImpl extends ServiceImpl<PostImagesDao, PostImages
         );
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public List<String> getImages(Long id) {
+        List<PostImagesEntity> postImagesEntityList = this.list(new QueryWrapper<PostImagesEntity>().eq("post_id", id));
+        List<String> collect = postImagesEntityList.stream().map(item -> item.getUrl()).collect(Collectors.toList());
+        return collect;
     }
 
 }

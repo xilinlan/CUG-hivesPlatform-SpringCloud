@@ -16,5 +16,7 @@ import java.util.Map;
 public interface PostLikesService extends IService<PostLikesEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    PostLikesEntity isLike(Long userId, Long id);
 }
 

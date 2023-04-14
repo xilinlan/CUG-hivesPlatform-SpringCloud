@@ -45,9 +45,9 @@ public class PostEntity implements Serializable {
 	 */
 	private String nickname;
 	/**
-	 * 浏览量
+	 * 收藏量
 	 */
-	private Long visits;
+	private Long collects;
 	/**
 	 * 点赞数
 	 */
