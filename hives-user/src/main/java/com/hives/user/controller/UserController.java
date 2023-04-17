@@ -84,14 +84,19 @@ public class UserController {
     @GetMapping("/sendCode")
     public R sendCode(@RequestParam String email){
         // 接收到请求，检查邮箱是否合法以及数据库中已经存在邮箱，生成验证码，当验证码生成并发送到邮件后，返回ok
-        System.out.println(email);
-        // 生成验证码 6位
-        String verifyCode = String.valueOf((Math.random()*9+1)*100000).substring(0,6);
-        // 将验证码存入redis
-        stringRedisTemplate.opsForValue().set(email,verifyCode,60 * 10, TimeUnit.SECONDS);
-        // 调用第三方服务包将验证码发送到邮箱
-        emailFeignService.sendCode(verifyCode,email);
-        return R.ok().put("sendStatus", UserConstant.EmailEnum.SUCCESS.getCode()).put("msg",UserConstant.EmailEnum.SUCCESS.getMsg());
+        Boolean checkEmail = userService.checkEmail(email);
+        if(checkEmail){
+            return R.ok().put("sendStatus", UserConstant.EmailEnum.EXISTS.getCode()).put("msg",UserConstant.EmailEnum.EXISTS.getMsg());
+        }
+        else{
+            // 生成验证码 6位
+            String verifyCode = String.valueOf((Math.random()*9+1)*100000).substring(0,6);
+            // 将验证码存入redis
+            stringRedisTemplate.opsForValue().set(email,verifyCode,60 * 10, TimeUnit.SECONDS);
+            // 调用第三方服务包将验证码发送到邮箱
+            emailFeignService.sendCode(verifyCode,email);
+            return R.ok().put("sendStatus", UserConstant.EmailEnum.SUCCESS.getCode()).put("msg",UserConstant.EmailEnum.SUCCESS.getMsg());
+        }
     }
 
     /**

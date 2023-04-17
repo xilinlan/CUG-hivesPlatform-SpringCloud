@@ -54,6 +54,12 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
     }
 
     @Override
+    public Boolean checkEmail(String email) {
+        UserEntity userEntity = this.getOne(new QueryWrapper<UserEntity>().eq("email", email));
+        return userEntity != null;
+    }
+
+    @Override
     public Integer updatePassword(UserEntity user) {
         String password = user.getPassword();
         password = DigestUtils.md5DigestAsHex(password.getBytes());

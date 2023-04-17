@@ -23,7 +23,7 @@ public interface UserService extends IService<UserEntity> {
 
     Integer updatePassword(UserEntity user);
 
-
+    Boolean checkEmail(String email);
 
 
 }
