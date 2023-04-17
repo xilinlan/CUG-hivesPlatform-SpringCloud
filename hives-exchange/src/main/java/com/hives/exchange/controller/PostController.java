@@ -3,6 +3,7 @@ package com.hives.exchange.controller;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import com.hives.common.constant.PostConstant;
 import com.hives.common.utils.PageUtils;
@@ -49,8 +50,10 @@ public class PostController {
      */
     @RequestMapping("/list")
     //@RequiresPermissions("exchange:post:list")
-    public R list(@RequestParam Map<String, Object> params){
-        PageUtils page =postService.queryPostPage(params);
+    public R list(@RequestParam Map<String, Object> params) throws ExecutionException, InterruptedException {
+        Long userId = Long.parseLong((String) params.get("userId"));
+        System.out.println(userId);
+        PageUtils page =postService.queryPostPage(params,userId);
         // postService.queryPage(params);
         return R.ok().put("page", page);
     }

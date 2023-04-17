@@ -1,14 +1,7 @@
-/**
- * Copyright (c) 2016-2019 人人开源 All rights reserved.
- *
- * https://www.renren.io
- *
- * 版权所有，侵权必究！
- */
-
 package com.hives.common.exception;
 
 import com.hives.common.utils.R;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.AuthorizationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,9 +49,9 @@ public class RRExceptionHandler {
 		return R.error("没有权限，请联系管理员授权");
 	}
 
-	@ExceptionHandler(Exception.class)
-	public R handleException(Exception e){
-		logger.error(e.getMessage(), e);
-		return R.error();
+	@ExceptionHandler(Throwable.class)
+	public R handleException(Throwable throwable) {
+		logger.error(throwable.getMessage(), throwable);
+		return R.error(BizCodeEnume.UNKOWN_EXCEPTION.getCode(), BizCodeEnume.UNKOWN_EXCEPTION.getMsg());
 	}
 }

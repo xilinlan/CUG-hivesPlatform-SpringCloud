@@ -1,10 +1,12 @@
 package com.hives.exchange.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hives.common.to.UserTo;
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.Query;
 import com.hives.common.utils.R;
+import com.hives.exchange.config.CacheRemove;
 import com.hives.exchange.dto.PostDto;
 import com.hives.exchange.entity.PostCollectsEntity;
 import com.hives.exchange.entity.PostImagesEntity;
@@ -17,12 +19,18 @@ import com.hives.exchange.vo.PostVo;
 import netscape.javascript.JSObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -49,6 +57,10 @@ public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements
 
     @Autowired
     private PostCollectsService postCollectsService;
+
+    @Autowired
+    private ThreadPoolExecutor threadPoolExecutor;
+
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         IPage<PostEntity> page = this.page(
@@ -60,6 +72,7 @@ public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements
     }
 
     @Override
+    @CacheEvict
     public void savePost(PostDto post) {
         PostEntity postEntity=new PostEntity();
         BeanUtils.copyProperties(post,postEntity);
@@ -80,9 +93,12 @@ public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements
         postImagesService.saveBatch(collect);
     }
 
+
+
     @Override
     @Transactional
-    public PageUtils queryPostPage(Map<String, Object> params) {
+    @Cacheable(value = "postCache" , key = "#root.method.name + '_' + #userId + '_' + #params.get('page')")
+    public PageUtils queryPostPage(Map<String, Object> params , Long userId){
         IPage<PostEntity> page = this.page(
                 new Query<PostEntity>().getPage(params),
                 new QueryWrapper<PostEntity>()
@@ -94,27 +110,43 @@ public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements
             PostVo postVo = new PostVo();
             BeanUtils.copyProperties(item, postVo);
 
-            List<String>images=postImagesService.getImages(item.getId());
-            postVo.setUrls(images);
+            CompletableFuture<Void>imagesFuture=CompletableFuture.runAsync(()->{
+                List<String>images=postImagesService.getImages(item.getId());
+                postVo.setUrls(images);
+            },threadPoolExecutor);
 
-            UserTo userTo = userFeignService.userInfo(item.getUserId());
+            CompletableFuture<Void>userFuture=CompletableFuture.runAsync(()->{
+                UserTo userTo = userFeignService.userInfo(item.getUserId());
+                postVo.setEmail(userTo.getEmail());
+                postVo.setHeader(userTo.getHeader());
+                postVo.setNickname(userTo.getNickname());
+                postVo.setHot(0L);
+            },threadPoolExecutor);
 
-            postVo.setEmail(userTo.getEmail());
-            postVo.setHeader(userTo.getHeader());
-            postVo.setNickname(userTo.getNickname());
+            CompletableFuture<Void>postLoveFuture=CompletableFuture.runAsync(()->{
+                PostLikesEntity postLikesEntity=postLikesService.isLike(userId,item.getId());
+                postVo.setIsLove(postLikesEntity!=null);
+            },threadPoolExecutor);
 
-            postVo.setHot(0L);
+            CompletableFuture<Void>postCollectFuture=CompletableFuture.runAsync(()->{
+                PostCollectsEntity postCollectsEntity=postCollectsService.isCollect(userId,item.getId());
+                postVo.setIsCollect(postCollectsEntity!=null);
+            },threadPoolExecutor);
 
-            PostLikesEntity postLikesEntity=postLikesService.isLike(item.getUserId(),item.getId());
-            postVo.setIsLove(postLikesEntity != null);
 
-            PostCollectsEntity postCollectsEntity=postCollectsService.isCollect(item.getUserId(),item.getId());
-            postVo.setIsCollect(postCollectsEntity != null);
+            try {
+                CompletableFuture.allOf(imagesFuture,userFuture,postLoveFuture,postCollectFuture).get();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (ExecutionException e) {
+                throw new RuntimeException(e);
+            }
+
             return postVo;
         }).collect(Collectors.toList());
         pageUtils.setList(collect);
 
         return pageUtils;
     }
-
 }
+

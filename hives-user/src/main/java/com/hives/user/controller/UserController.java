@@ -13,6 +13,7 @@ import com.hives.common.utils.R;
 
 import com.hives.user.feign.EmailFeignService;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -33,6 +34,7 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("user/user")
+@Slf4j
 public class UserController {
     @Autowired
     private UserService userService;
@@ -198,6 +200,13 @@ public class UserController {
     public R delete(@RequestBody Long[] ids){
 		userService.removeByIds(Arrays.asList(ids));
 
+        return R.ok();
+    }
+
+    @GetMapping("/exception/test")
+    public R test(){
+        log.info("进入函数");
+        int a=10/0;
         return R.ok();
     }
 
