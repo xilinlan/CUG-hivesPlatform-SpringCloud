@@ -86,4 +86,25 @@ public class UserConstant {
             return msg;
         }
     }
+
+    public enum UdpWEnum{
+        FAIL(0,"修改失败"),SUCCESS(1,"修改成功"),NOTEXIST(2,"用户不存在"),REPEAT(3,"密码重复");
+
+        UdpWEnum(int code,String msg){
+            this.code=code;
+            this.msg=msg;
+        }
+
+        private final int code;
+
+        private final String msg;
+
+        public int getCode() {
+            return code;
+        }
+
+        public String getMsg() {
+            return msg;
+        }
+    }
 }

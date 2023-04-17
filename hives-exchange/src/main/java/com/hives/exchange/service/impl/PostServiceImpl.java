@@ -106,18 +106,10 @@ public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements
             postVo.setHot(0L);
 
             PostLikesEntity postLikesEntity=postLikesService.isLike(item.getUserId(),item.getId());
-            if(postLikesEntity!=null){
-                postVo.setIsLove(true);
-            }else{
-                postVo.setIsLove(false);
-            }
+            postVo.setIsLove(postLikesEntity != null);
 
             PostCollectsEntity postCollectsEntity=postCollectsService.isCollect(item.getUserId(),item.getId());
-            if(postCollectsEntity!=null){
-                postVo.setIsCollect(true);
-            }else{
-                postVo.setIsCollect(false);
-            }
+            postVo.setIsCollect(postCollectsEntity != null);
             return postVo;
         }).collect(Collectors.toList());
         pageUtils.setList(collect);
