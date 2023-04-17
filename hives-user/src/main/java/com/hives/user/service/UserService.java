@@ -21,6 +21,8 @@ public interface UserService extends IService<UserEntity> {
 
     UserEntity register(UserEntity user);
 
+    Integer updatePassword(UserEntity user);
+
 
 
 

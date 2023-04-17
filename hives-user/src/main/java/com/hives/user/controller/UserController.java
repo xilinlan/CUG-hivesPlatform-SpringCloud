@@ -143,6 +143,27 @@ public class UserController {
         System.out.println(userTo);
         return userTo;
     }
+
+    @PostMapping("/updatePassword")
+    public R updatePassword(@RequestBody UserEntity user){
+        Integer status =userService.updatePassword(user);
+        Integer notExist=UserConstant.UdpWEnum.NOTEXIST.getCode();
+        Integer repeat=UserConstant.UdpWEnum.REPEAT.getCode();
+        Integer success=UserConstant.UdpWEnum.SUCCESS.getCode();
+        if (status.equals(notExist))
+        {
+            return R.ok().put("udpwStatus",notExist).put("msg",UserConstant.UdpWEnum.NOTEXIST.getMsg());
+        }
+        else if(status.equals(repeat))
+        {
+            return R.ok().put("udpwStatus",repeat).put("msg",UserConstant.UdpWEnum.REPEAT.getMsg());
+        }
+        else
+        {
+            return R.ok().put("udpwStatus",success).put("msg",UserConstant.UdpWEnum.SUCCESS.getMsg());
+        }
+    }
+
     /**
      * 保存
      */
@@ -150,7 +171,6 @@ public class UserController {
     //@RequiresPermissions("user:user:save")
     public R save(@RequestBody UserEntity user){
 		userService.save(user);
-
         return R.ok();
     }
 

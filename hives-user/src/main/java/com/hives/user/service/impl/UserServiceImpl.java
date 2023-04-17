@@ -53,4 +53,29 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
         return user;
     }
 
+    @Override
+    public Integer updatePassword(UserEntity user) {
+        String password = user.getPassword();
+        password = DigestUtils.md5DigestAsHex(password.getBytes());
+        //先查询用户是否存在
+        UserEntity userEntity = this.getOne(new QueryWrapper<UserEntity>().eq("email", user.getEmail()));
+        if (userEntity == null) {
+            // 用户不存在
+            return 2;
+        }
+        else if(userEntity.getPassword().equals(password))
+        {
+            // 新密码不能与旧密码相同
+            return 3;
+        }
+        else
+        {
+            // 更新密码
+            userEntity.setPassword(password);
+            this.updateById(userEntity);
+            return 1;
+        }
+
+    }
+
 }
