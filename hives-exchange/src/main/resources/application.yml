@@ -8,11 +8,17 @@ spring:
     nacos:
       discovery:
         server-addr: 124.223.20.95:8848
-  application:
-    name: hives-exchange
+  cache:
+    type: redis  # 配置使用redis作为缓存
+    redis:
+      time-to-live: 3600000          # 过期时间 ms
+      #      key-prefix: CACHE_              # key前缀  没有设置默认以缓存名字作为前缀
+      use-key-prefix: true            # 是否使用写入redis前缀
+      cache-null-values: true         # 是否允许缓存空值  防止缓存穿透
   redis:
     host: 1.117.105.39
     port: 6124
+
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml
@@ -22,3 +28,8 @@ mybatis-plus:
 server:
   port: 10000
 
+hives:
+  thread:
+    coreSize: 20
+    maxSize: 200
+    keepAliveTime: 10

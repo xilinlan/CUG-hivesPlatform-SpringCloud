@@ -6,6 +6,7 @@ import com.hives.exchange.dto.PostDto;
 import com.hives.exchange.entity.PostEntity;
 
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 /**
  * 贴子
@@ -20,6 +21,8 @@ public interface PostService extends IService<PostEntity> {
 
     void savePost(PostDto post);
 
-    PageUtils queryPostPage(Map<String, Object> params);
+    PageUtils queryPostPage(Map<String, Object> params,Long userId) throws ExecutionException, InterruptedException;
+
+    void cacheTest(Long userId);
 }
 
