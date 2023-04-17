@@ -148,10 +148,5 @@ public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements
 
         return pageUtils;
     }
-
-    @Override
-    @CacheRemove(value = "postCache",key = "queryPostPage_")
-    public void cacheTest(Long userId) {
-        System.out.println("调用方法");
-    }
 }
+
