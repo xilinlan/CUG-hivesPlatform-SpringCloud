@@ -40,7 +40,10 @@ public class PageUtils implements Serializable {
 	 * 列表数据
 	 */
 	private List<?> list;
-	
+
+	public PageUtils() {
+	}
+
 	/**
 	 * 分页
 	 * @param list        列表数据

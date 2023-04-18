@@ -72,8 +72,8 @@ public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements
     }
 
     @Override
-    @CacheEvict
-    public void savePost(PostDto post) {
+    @CacheRemove(value = "postCache", key="queryPostPage_")
+    public void savePost(Long userId,PostDto post) {
         PostEntity postEntity=new PostEntity();
         BeanUtils.copyProperties(post,postEntity);
         //SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -147,6 +147,12 @@ public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements
         pageUtils.setList(collect);
 
         return pageUtils;
+    }
+
+    @Override
+    @CacheRemove()
+    public void cacheTest(Long userId) {
+
     }
 }
 

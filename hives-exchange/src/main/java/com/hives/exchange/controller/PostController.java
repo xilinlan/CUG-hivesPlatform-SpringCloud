@@ -75,7 +75,7 @@ public class PostController {
      */
     @PostMapping("/save")
     public R save(@RequestBody PostDto post){
-        postService.savePost(post);
+        postService.savePost(post.getUserId(), post);
 
         return R.ok().put("postStatus", PostConstant.PostEnum.SUCCESS.getCode()).put("msg",PostConstant.PostEnum.SUCCESS.getMsg());
     }
