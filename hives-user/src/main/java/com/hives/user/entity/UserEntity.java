@@ -78,4 +78,9 @@ public class UserEntity implements Serializable {
 	 */
 	private Integer followCount;
 
+	/**
+	 * 背景图片
+	 */
+	private String background;
+
 }

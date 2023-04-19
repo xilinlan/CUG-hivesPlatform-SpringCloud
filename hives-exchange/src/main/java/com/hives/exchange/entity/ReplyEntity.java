@@ -55,16 +55,13 @@ public class ReplyEntity implements Serializable {
 	 */
 	private Long targetId;
 	/**
-	 * 回复人的昵称
-	 */
-	private String userNickname;
-	/**
-	 * 被回复人的昵称
-	 */
-	private String targetNickname;
-	/**
 	 * 是否显示[0-未被删除，1被删除]
 	 */
 	private Integer isDeleted;
+
+	/**
+	 * 所属的一级回复id
+	 */
+	private Long reply1Id;
 
 }

@@ -17,6 +17,7 @@
         <module>hives-common</module>
         <module>hives-gateway</module>
         <module>hives-third</module>
+        <module>hives-chat</module>
     </modules>
 
 </project>
