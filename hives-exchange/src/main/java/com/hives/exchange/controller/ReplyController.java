@@ -1,17 +1,15 @@
 package com.hives.exchange.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.R;
+import com.hives.exchange.vo.Reply1Vo;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.hives.exchange.entity.ReplyEntity;
 import com.hives.exchange.service.ReplyService;
@@ -31,6 +29,13 @@ import com.hives.exchange.service.ReplyService;
 public class ReplyController {
     @Autowired
     private ReplyService replyService;
+
+    @GetMapping("/firstLevelComments")
+    public R firstLevelComments(@RequestParam Long postId)
+    {
+        List<Reply1Vo> replyVoList=replyService.getFirstLevelComments(postId);
+        return R.ok().put("data",replyVoList);
+    }
 
     /**
      * 列表
@@ -58,11 +63,10 @@ public class ReplyController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
     //@RequiresPermissions("exchange:reply:save")
     public R save(@RequestBody ReplyEntity reply){
-		replyService.save(reply);
-
+        replyService.saveReply(reply);
         return R.ok();
     }
 

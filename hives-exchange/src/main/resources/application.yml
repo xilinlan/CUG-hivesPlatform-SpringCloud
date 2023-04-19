@@ -4,6 +4,9 @@ spring:
     username: root
     password: 11120305
     url: jdbc:mysql://1.117.105.39:3308/hives_exchange?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2B8
+    hikari:
+      max-lifetime: 600000
+      maximum-pool-size: 10
   cloud:
     nacos:
       discovery:

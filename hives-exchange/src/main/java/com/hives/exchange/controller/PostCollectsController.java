@@ -7,11 +7,7 @@ import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.R;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.hives.exchange.entity.PostCollectsEntity;
 import com.hives.exchange.service.PostCollectsService;
@@ -69,11 +65,11 @@ public class PostCollectsController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
     //@RequiresPermissions("exchange:postcollects:update")
     public R update(@RequestBody PostCollectsEntity postCollects){
-		postCollectsService.updateById(postCollects);
-
+		// postCollectsService.updateById(postCollects);
+        postCollectsService.updateCollects(postCollects.getUserId(),postCollects.getPostId());
         return R.ok();
     }
 
