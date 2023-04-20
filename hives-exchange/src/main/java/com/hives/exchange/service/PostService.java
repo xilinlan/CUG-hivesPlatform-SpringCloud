@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.hives.common.utils.PageUtils;
 import com.hives.exchange.dto.PostDto;
 import com.hives.exchange.entity.PostEntity;
+import com.hives.exchange.vo.PostVo;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -23,6 +25,6 @@ public interface PostService extends IService<PostEntity> {
 
     PageUtils queryPostPage(Map<String, Object> params,Long userId) throws ExecutionException, InterruptedException;
 
-    void cacheTest(Long userId);
+    List<PostVo> getPostVoList(Long userId,List<PostEntity> postList);
 }
 

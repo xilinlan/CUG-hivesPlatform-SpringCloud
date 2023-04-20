@@ -3,7 +3,9 @@ package com.hives.exchange.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hives.common.utils.PageUtils;
 import com.hives.exchange.entity.PostCollectsEntity;
+import com.hives.exchange.vo.PostVo;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,5 +22,7 @@ public interface PostCollectsService extends IService<PostCollectsEntity> {
     PostCollectsEntity isCollect(Long userId, Long id);
 
     void updateCollects(Long userId, Long postId);
+
+    PageUtils getUserCollects(Map<String, Object> params, Long userId);
 }
 

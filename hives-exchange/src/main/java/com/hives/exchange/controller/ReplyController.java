@@ -3,6 +3,7 @@ package com.hives.exchange.controller;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.R;
@@ -31,8 +32,7 @@ public class ReplyController {
     private ReplyService replyService;
 
     @GetMapping("/firstLevelComments")
-    public R firstLevelComments(@RequestParam Long postId)
-    {
+    public R firstLevelComments(@RequestParam Long postId) throws ExecutionException, InterruptedException {
         List<Reply1Vo> replyVoList=replyService.getFirstLevelComments(postId);
         return R.ok().put("data",replyVoList);
     }

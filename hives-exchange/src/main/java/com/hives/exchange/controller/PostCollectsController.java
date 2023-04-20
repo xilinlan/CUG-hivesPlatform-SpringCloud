@@ -1,10 +1,12 @@
 package com.hives.exchange.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.R;
+import com.hives.exchange.vo.PostVo;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,15 +33,12 @@ public class PostCollectsController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
-    //@RequiresPermissions("exchange:postcollects:list")
+    @GetMapping("/list")
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = postCollectsService.queryPage(params);
-
-        return R.ok().put("page", page);
+        Long userId = Long.parseLong((String) params.get("userId"));
+        PageUtils page= postCollectsService.getUserCollects(params,userId);
+        return R.ok().put("page",page);
     }
-
-
     /**
      * 信息
      */

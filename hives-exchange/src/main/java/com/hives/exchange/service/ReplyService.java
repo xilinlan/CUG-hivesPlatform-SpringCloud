@@ -7,6 +7,7 @@ import com.hives.exchange.vo.Reply1Vo;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 /**
  * 回答
@@ -21,6 +22,6 @@ public interface ReplyService extends IService<ReplyEntity> {
 
     void saveReply(ReplyEntity reply);
 
-    List<Reply1Vo> getFirstLevelComments(Long postId);
+    List<Reply1Vo> getFirstLevelComments(Long postId) throws ExecutionException, InterruptedException;
 }
 

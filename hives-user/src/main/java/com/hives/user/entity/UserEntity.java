@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 /**
@@ -60,14 +62,17 @@ public class UserEntity implements Serializable {
 	/**
 	 * 生日
 	 */
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date birthday;
 	/**
 	 * 注册日期
 	 */
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date createTime;
 	/**
 	 * 最后活跃
 	 */
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date lastTime;
 	/**
 	 * 粉丝数
