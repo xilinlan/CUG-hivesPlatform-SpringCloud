@@ -52,9 +52,8 @@ public class PostController {
     //@RequiresPermissions("exchange:post:list")
     public R list(@RequestParam Map<String, Object> params) throws ExecutionException, InterruptedException {
         Long userId = Long.parseLong((String) params.get("userId"));
-        System.out.println(userId);
         PageUtils page =postService.queryPostPage(params,userId);
-        // postService.queryPage(params);
+
         return R.ok().put("page", page);
     }
 

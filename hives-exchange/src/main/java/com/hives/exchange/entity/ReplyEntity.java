@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 /**
@@ -39,6 +41,7 @@ public class ReplyEntity implements Serializable {
 	/**
 	 * 创建日期
 	 */
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date createTime;
 
 	/**
@@ -55,16 +58,13 @@ public class ReplyEntity implements Serializable {
 	 */
 	private Long targetId;
 	/**
-	 * 回复人的昵称
-	 */
-	private String userNickname;
-	/**
-	 * 被回复人的昵称
-	 */
-	private String targetNickname;
-	/**
 	 * 是否显示[0-未被删除，1被删除]
 	 */
 	private Integer isDeleted;
+
+	/**
+	 * 所属的一级回复id
+	 */
+	private Long reply1Id;
 
 }

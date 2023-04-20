@@ -67,7 +67,8 @@ public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements
                 new Query<PostEntity>().getPage(params),
                 new QueryWrapper<PostEntity>()
         );
-
+        System.out.println(page.getSize());
+        System.out.println(page.getRecords().size());
         return new PageUtils(page);
     }
 
@@ -103,9 +104,22 @@ public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements
                 new Query<PostEntity>().getPage(params),
                 new QueryWrapper<PostEntity>()
         );
+        System.out.println(page.getSize());
+
         PageUtils pageUtils=new PageUtils(page);
         List<PostEntity>postList=page.getRecords();
 
+        System.out.println(postList.size());
+        List<PostVo>collect=getPostVoList(userId,postList);
+
+        pageUtils.setList(collect);
+
+        return pageUtils;
+    }
+
+    @Override
+    @Transactional
+    public List<PostVo> getPostVoList(Long userId , List<PostEntity> postList) {
         List<PostVo> collect = postList.stream().map(item -> {
             PostVo postVo = new PostVo();
             BeanUtils.copyProperties(item, postVo);
@@ -144,15 +158,9 @@ public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements
 
             return postVo;
         }).collect(Collectors.toList());
-        pageUtils.setList(collect);
-
-        return pageUtils;
+        return collect;
     }
 
-    @Override
-    @CacheRemove()
-    public void cacheTest(Long userId) {
 
-    }
 }
 

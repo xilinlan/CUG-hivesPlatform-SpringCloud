@@ -1,17 +1,15 @@
 package com.hives.exchange.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.R;
+import com.hives.exchange.vo.PostVo;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.hives.exchange.entity.PostCollectsEntity;
 import com.hives.exchange.service.PostCollectsService;
@@ -35,15 +33,12 @@ public class PostCollectsController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
-    //@RequiresPermissions("exchange:postcollects:list")
+    @GetMapping("/list")
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = postCollectsService.queryPage(params);
-
-        return R.ok().put("page", page);
+        Long userId = Long.parseLong((String) params.get("userId"));
+        PageUtils page= postCollectsService.getUserCollects(params,userId);
+        return R.ok().put("page",page);
     }
-
-
     /**
      * 信息
      */
@@ -69,11 +64,11 @@ public class PostCollectsController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
     //@RequiresPermissions("exchange:postcollects:update")
     public R update(@RequestBody PostCollectsEntity postCollects){
-		postCollectsService.updateById(postCollects);
-
+		// postCollectsService.updateById(postCollects);
+        postCollectsService.updateCollects(postCollects.getUserId(),postCollects.getPostId());
         return R.ok();
     }
 
