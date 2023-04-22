@@ -80,7 +80,6 @@ public class PostLikesController {
     //@RequiresPermissions("exchange:postlikes:delete")
     public R delete(@RequestBody Long[] ids){
 		postLikesService.removeByIds(Arrays.asList(ids));
-
         return R.ok();
     }
 
