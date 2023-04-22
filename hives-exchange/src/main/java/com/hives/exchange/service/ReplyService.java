@@ -20,8 +20,14 @@ public interface ReplyService extends IService<ReplyEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
 
-    void saveReply(ReplyEntity reply);
+    ReplyEntity saveReply(ReplyEntity reply);
 
     List<Reply1Vo> getFirstLevelComments(Long postId) throws ExecutionException, InterruptedException;
+
+    void removeReplyByPostIds(List<Long> asList);
+
+    void logicRemoveByIds(List<Long> asList);
+
+    void logicRemoveReply(ReplyEntity item);
 }
 
