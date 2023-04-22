@@ -12,7 +12,7 @@ public enum BizCodeEnume {
     /**
      * 未知异常
      */
-    PRODUCT_UP_EXCEPTION(11000,"未知异常");
+    SYSTEM_BUSY_EXCEPTION(11000,"系统繁忙，请稍后再试！");
 
 
     private final int code;

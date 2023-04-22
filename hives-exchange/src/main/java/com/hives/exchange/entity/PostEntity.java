@@ -44,10 +44,7 @@ public class PostEntity implements Serializable {
 	 * 用户ID
 	 */
 	private Long userId;
-	/**
-	 * 昵称
-	 */
-	private String nickname;
+
 	/**
 	 * 收藏量
 	 */

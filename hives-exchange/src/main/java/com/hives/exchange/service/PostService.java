@@ -26,5 +26,9 @@ public interface PostService extends IService<PostEntity> {
     PageUtils queryPostPage(Map<String, Object> params,Long userId) throws ExecutionException, InterruptedException;
 
     List<PostVo> getPostVoList(Long userId,List<PostEntity> postList);
+
+    PageUtils queryOwnPage(Map<String, Object> params, Long userId);
+
+    void logicRemoveByIds(List<Long> asList);
 }
 
