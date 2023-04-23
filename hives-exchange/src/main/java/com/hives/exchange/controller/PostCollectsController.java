@@ -43,7 +43,6 @@ public class PostCollectsController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    //@RequiresPermissions("exchange:postcollects:info")
     public R info(@PathVariable("id") Long id){
 		PostCollectsEntity postCollects = postCollectsService.getById(id);
 
@@ -54,7 +53,6 @@ public class PostCollectsController {
      * 保存
      */
     @RequestMapping("/save")
-    //@RequiresPermissions("exchange:postcollects:save")
     public R save(@RequestBody PostCollectsEntity postCollects){
 		postCollectsService.save(postCollects);
 
@@ -65,7 +63,6 @@ public class PostCollectsController {
      * 修改
      */
     @PostMapping("/update")
-    //@RequiresPermissions("exchange:postcollects:update")
     public R update(@RequestBody PostCollectsEntity postCollects){
 		// postCollectsService.updateById(postCollects);
         postCollectsService.updateCollects(postCollects.getUserId(),postCollects.getPostId());

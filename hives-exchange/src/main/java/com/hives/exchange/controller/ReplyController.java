@@ -41,7 +41,6 @@ public class ReplyController {
      * 列表
      */
     @RequestMapping("/list")
-    //@RequiresPermissions("exchange:reply:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = replyService.queryPage(params);
 
@@ -53,7 +52,6 @@ public class ReplyController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    //@RequiresPermissions("exchange:reply:info")
     public R info(@PathVariable("id") Long id){
 		ReplyEntity reply = replyService.getById(id);
 
@@ -64,17 +62,15 @@ public class ReplyController {
      * 保存
      */
     @PostMapping("/save")
-    //@RequiresPermissions("exchange:reply:save")
     public R save(@RequestBody ReplyEntity reply){
-        replyService.saveReply(reply);
-        return R.ok();
+        ReplyEntity replyEntity = replyService.saveReply(reply);
+        return R.ok().put("reply",replyEntity);
     }
 
     /**
      * 修改
      */
     @RequestMapping("/update")
-    //@RequiresPermissions("exchange:reply:update")
     public R update(@RequestBody ReplyEntity reply){
 		replyService.updateById(reply);
 
@@ -85,10 +81,12 @@ public class ReplyController {
      * 删除
      */
     @RequestMapping("/delete")
-    //@RequiresPermissions("exchange:reply:delete")
     public R delete(@RequestBody Long[] ids){
-		replyService.removeByIds(Arrays.asList(ids));
-
+        List<ReplyEntity> replyEntityList = replyService.listByIds(Arrays.asList(ids));
+        for (ReplyEntity item:
+                replyEntityList) {
+            replyService.logicRemoveReply(item);
+        }
         return R.ok();
     }
 

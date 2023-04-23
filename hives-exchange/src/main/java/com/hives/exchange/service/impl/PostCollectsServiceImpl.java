@@ -3,12 +3,14 @@ package com.hives.exchange.service.impl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.Query;
+import com.hives.exchange.config.CacheRemove;
 import com.hives.exchange.entity.PostEntity;
 import com.hives.exchange.entity.PostLikesEntity;
 import com.hives.exchange.service.PostService;
 import com.hives.exchange.vo.PostVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -52,6 +54,7 @@ public class PostCollectsServiceImpl extends ServiceImpl<PostCollectsDao, PostCo
     }
 
     @Override
+    @CacheRemove(value = "postCollects", key={"getUserCollects_","queryPostPage_"})
     public void updateCollects(Long userId, Long postId) {
         PostEntity post = postService.getById(postId);
         Long collects = post.getCollects();
@@ -93,4 +96,13 @@ public class PostCollectsServiceImpl extends ServiceImpl<PostCollectsDao, PostCo
         return pageUtils;
     }
 
+    @Override
+    public void removePostCollectsByPostId(Long postId) {
+        List<PostCollectsEntity> collectsEntities = this.list(new QueryWrapper<PostCollectsEntity>().eq("post_id", postId));
+        List<PostCollectsEntity> collect = collectsEntities.stream().map(item -> {
+            item.setIsDeleted(1);
+            return item;
+        }).collect(Collectors.toList());
+        this.updateBatchById(collect);
+    }
 }
