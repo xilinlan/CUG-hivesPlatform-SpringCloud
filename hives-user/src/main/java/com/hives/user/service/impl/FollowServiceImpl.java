@@ -77,7 +77,7 @@ public class FollowServiceImpl extends ServiceImpl<FollowDao, FollowEntity> impl
             return null;
         }
         //2.查询是否关注
-        FollowEntity followEntity = this.getOne(new QueryWrapper<FollowEntity>().eq("user_id", userId).eq("target_id", targetId));
+        FollowEntity followEntity = this.getOne(new QueryWrapper<FollowEntity>().eq("user_id", userId).eq("target_id", targetId).eq("is_deleted", 0));
         isFollow = followEntity != null;
         OtherUserVo otherUserVo = new OtherUserVo();
         otherUserVo.setId(userEntity.getId());
