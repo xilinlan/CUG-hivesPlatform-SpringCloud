@@ -67,8 +67,7 @@ public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements
                 new Query<PostEntity>().getPage(params),
                 new QueryWrapper<PostEntity>()
         );
-        System.out.println(page.getSize());
-        System.out.println(page.getRecords().size());
+
         return new PageUtils(page);
     }
 
@@ -104,8 +103,6 @@ public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements
                 new Query<PostEntity>().getPage(params),
                 new QueryWrapper<PostEntity>()
         );
-        System.out.println(page.getSize());
-
         PageUtils pageUtils=new PageUtils(page);
         List<PostEntity>postList=page.getRecords();
 

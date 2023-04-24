@@ -3,6 +3,8 @@ package com.hives.user.service.impl;
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.Query;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -25,6 +27,13 @@ public class FollowServiceImpl extends ServiceImpl<FollowDao, FollowEntity> impl
         );
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public List<FollowEntity> getFollow(Long userId) {
+        QueryWrapper<FollowEntity> wrapper = new QueryWrapper<>();
+        wrapper.eq("user_id", userId);
+        return this.list(wrapper);
     }
 
 }
