@@ -5,6 +5,7 @@ import com.hives.common.utils.Query;
 import com.hives.user.entity.UserEntity;
 import com.hives.user.service.UserService;
 import com.hives.user.vo.FollowerVo;
+import com.hives.user.vo.OtherUserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -65,6 +66,35 @@ public class FollowServiceImpl extends ServiceImpl<FollowDao, FollowEntity> impl
         }).collect(Collectors.toList());
 
         return collect;
+    }
+
+    @Override
+    public OtherUserVo getOtherUserInfo(Long userId, Long targetId) {
+        Boolean isFollow = false;
+        //1.查询targetId的用户信息
+        UserEntity userEntity = userService.getById(targetId);
+        if(userEntity == null) {
+            return null;
+        }
+        //2.查询是否关注
+        FollowEntity followEntity = this.getOne(new QueryWrapper<FollowEntity>().eq("user_id", userId).eq("target_id", targetId));
+        isFollow = followEntity != null;
+        OtherUserVo otherUserVo = new OtherUserVo();
+        otherUserVo.setId(userEntity.getId());
+        otherUserVo.setNickname(userEntity.getNickname());
+        otherUserVo.setHeader(userEntity.getHeader());
+        otherUserVo.setEmail(userEntity.getEmail());
+        otherUserVo.setBackground(userEntity.getBackground());
+        otherUserVo.setGender(userEntity.getGender());
+        otherUserVo.setBirthday(userEntity.getBirthday());
+        otherUserVo.setPhoneNumber(userEntity.getPhoneNumber());
+        otherUserVo.setFollowCount(userEntity.getFollowCount());
+        otherUserVo.setFansCount(userEntity.getFansCount());
+        otherUserVo.setCreateTime(userEntity.getCreateTime());
+        otherUserVo.setLastTime(userEntity.getLastTime());
+        //3.是否关注信息
+        otherUserVo.setIsFollow(isFollow);
+        return otherUserVo;
     }
 
 }
