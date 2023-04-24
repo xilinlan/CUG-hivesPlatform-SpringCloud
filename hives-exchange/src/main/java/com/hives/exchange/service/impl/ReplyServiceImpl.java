@@ -4,6 +4,7 @@ import com.hives.common.to.UserTo;
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.Query;
 import com.hives.exchange.feign.UserFeignService;
+import com.hives.exchange.service.PostService;
 import com.hives.exchange.service.ReplyLikesService;
 import com.hives.exchange.vo.Reply1Vo;
 import com.hives.exchange.vo.Reply2Vo;
@@ -11,6 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -38,6 +40,10 @@ public class ReplyServiceImpl extends ServiceImpl<ReplyDao, ReplyEntity> impleme
     private ReplyLikesService replyLikesService;
 
     @Autowired
+    @Lazy
+    private PostService postService;
+
+    @Autowired
     private ThreadPoolExecutor threadPoolExecutor;
 
     @Override
@@ -54,6 +60,7 @@ public class ReplyServiceImpl extends ServiceImpl<ReplyDao, ReplyEntity> impleme
     @CacheEvict(value = "replyCache",key="'getFirstLevelComments'+#reply.getPostId()")
     public ReplyEntity saveReply(ReplyEntity reply) {
         reply.setCreateTime(new Date());
+        postService.updatePostUpdateTime(reply.getPostId());
         this.save(reply);
         return reply;
     }

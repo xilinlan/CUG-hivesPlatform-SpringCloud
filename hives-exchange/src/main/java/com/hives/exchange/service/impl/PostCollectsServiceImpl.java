@@ -15,6 +15,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -88,7 +89,8 @@ public class PostCollectsServiceImpl extends ServiceImpl<PostCollectsDao, PostCo
         List<PostCollectsEntity> collectsEntityList = page.getRecords();
         List<Long> postIdCollect = collectsEntityList.stream().map(item -> item.getPostId()).collect(Collectors.toList());
 
-        List<PostEntity> postEntityList = postService.listByIds(postIdCollect);
+        List<PostEntity> postEntityList = postService.listByIds(postIdCollect).stream().sorted(Comparator.comparing(PostEntity::getUpdateTime).reversed()).collect(Collectors.toList());
+
         List<PostVo> postVoList = postService.getPostVoList(userId, postEntityList);
 
         PageUtils pageUtils=new PageUtils(page);

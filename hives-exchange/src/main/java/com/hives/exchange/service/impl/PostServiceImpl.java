@@ -108,7 +108,7 @@ public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements
         // 按params对象中存储的page和limit对象去对应页内容，具体的查询条件写在第二个QueryWrapper里
         IPage<PostEntity> page = this.page(
                 new Query<PostEntity>().getPage(params),
-                new QueryWrapper<PostEntity>().eq("is_deleted",0)
+                new QueryWrapper<PostEntity>().eq("is_deleted",0).orderByDesc("update_time")
         );
 
         PageUtils pageUtils=new PageUtils(page);
@@ -180,7 +180,7 @@ public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements
         // 查询出对应userId的page
         IPage<PostEntity> page = this.page(
                 new Query<PostEntity>().getPage(params),
-                new QueryWrapper<PostEntity>().eq("user_id",userId).eq("is_deleted",0)
+                new QueryWrapper<PostEntity>().eq("user_id",userId).eq("is_deleted",0).orderByDesc("create_time")
 
         );
         PageUtils pageUtils=new PageUtils(page);
@@ -232,6 +232,13 @@ public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements
 
         this.updateBatchById(collect);
         replyService.removeReplyByPostIds(asList);
+    }
+
+    @Override
+    public void updatePostUpdateTime(Long postId) {
+        PostEntity post = this.getById(postId);
+        post.setUpdateTime(new Date());
+        this.updateById(post);
     }
 }
 

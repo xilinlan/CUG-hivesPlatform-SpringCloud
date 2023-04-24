@@ -30,5 +30,7 @@ public interface PostService extends IService<PostEntity> {
     PageUtils queryOwnPage(Map<String, Object> params, Long userId);
 
     void logicRemoveByIds(List<Long> asList);
+
+    void updatePostUpdateTime(Long postId);
 }
 
