@@ -2,15 +2,14 @@ package com.hives.exchange.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.hives.common.constant.PostConstant;
 import com.hives.common.to.UserTo;
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.Query;
 import com.hives.common.utils.R;
 import com.hives.exchange.config.CacheRemove;
 import com.hives.exchange.dto.PostDto;
-import com.hives.exchange.entity.PostCollectsEntity;
-import com.hives.exchange.entity.PostImagesEntity;
-import com.hives.exchange.entity.PostLikesEntity;
+import com.hives.exchange.entity.*;
 import com.hives.exchange.feign.UserFeignService;
 import com.hives.exchange.service.*;
 import com.hives.exchange.vo.PostVo;
@@ -37,7 +36,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 
 import com.hives.exchange.dao.PostDao;
-import com.hives.exchange.entity.PostEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -54,6 +52,9 @@ public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements
 
     @Autowired
     private PostCollectsService postCollectsService;
+
+    @Autowired
+    private PostVideoService postVideoService;
 
     @Autowired
     private ReplyService replyService;
@@ -83,15 +84,25 @@ public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements
         postEntity.setUpdateTime(new Date());
         this.save(postEntity);
 
+        Integer type = post.getType();
         List<String> urls = post.getUrls();
-        List<PostImagesEntity> collect = urls.stream().map(item -> {
-            PostImagesEntity postImagesEntity = new PostImagesEntity();
-            postImagesEntity.setUrl(item);
-            postImagesEntity.setPostId(postEntity.getId());
-            return postImagesEntity;
-        }).collect(Collectors.toList());
-
-        postImagesService.saveBatch(collect);
+        if(type== PostConstant.PostTypeEnum.COMMON.getCode()){
+            List<PostImagesEntity> collect = urls.stream().map(item -> {
+                PostImagesEntity postImagesEntity = new PostImagesEntity();
+                postImagesEntity.setUrl(item);
+                postImagesEntity.setPostId(postEntity.getId());
+                return postImagesEntity;
+            }).collect(Collectors.toList());
+            postImagesService.saveBatch(collect);
+        }else{
+            List<PostVideoEntity> collect = urls.stream().map(item -> {
+                PostVideoEntity postVideoEntity = new PostVideoEntity();
+                postVideoEntity.setUrl(item);
+                postVideoEntity.setPostId(postEntity.getId());
+                return postVideoEntity;
+            }).collect(Collectors.toList());
+            postVideoService.saveBatch(collect);
+        }
     }
 
 
