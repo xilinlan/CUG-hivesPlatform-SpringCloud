@@ -86,7 +86,7 @@ public class PostCollectsServiceImpl extends ServiceImpl<PostCollectsDao, PostCo
     public PageUtils getUserCollects(Map<String, Object> params,Long userId) {
         IPage<PostCollectsEntity> page = this.page(
                 new Query<PostCollectsEntity>().getPage(params),
-                new QueryWrapper<PostCollectsEntity>().eq("user_id",userId)
+                new QueryWrapper<PostCollectsEntity>().eq("user_id",userId).eq("is_deleted",0)
         );
         List<PostCollectsEntity> collectsEntityList = page.getRecords();
         List<Long> postIdCollect = collectsEntityList.stream().map(item -> item.getPostId()).collect(Collectors.toList());
