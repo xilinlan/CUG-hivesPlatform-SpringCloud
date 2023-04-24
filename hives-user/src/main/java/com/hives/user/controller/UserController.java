@@ -184,12 +184,11 @@ public class UserController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @RequestMapping("/updatePersonal")
     //@RequiresPermissions("user:user:update")
     public R update(@RequestBody UserEntity user){
 		userService.updateById(user);
-
-        return R.ok();
+        return R.ok().put("udppStatus",UserConstant.UdpPEnum.SUCCESS.getCode()).put("msg",UserConstant.UdpPEnum.SUCCESS.getMsg());
     }
 
     /**

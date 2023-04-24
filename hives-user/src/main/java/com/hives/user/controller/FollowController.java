@@ -1,6 +1,7 @@
 package com.hives.user.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import com.hives.common.utils.PageUtils;
@@ -20,7 +21,7 @@ import com.hives.user.service.FollowService;
 
 
 /**
- * 
+ *
  *
  * @author zhangtao
  * @email 2298805496@qq.com
@@ -43,6 +44,12 @@ public class FollowController {
         return R.ok().put("page", page);
     }
 
+    @RequestMapping("/getFollows")
+    //@RequiresPermissions("user:follow:list")
+    public R getFollow(@RequestParam("userId") Long userId){
+        List<FollowEntity> follow = followService.getFollow(userId);
+        return R.ok().put("follow", follow);
+    }
 
     /**
      * 信息
