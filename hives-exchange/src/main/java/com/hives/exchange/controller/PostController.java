@@ -64,7 +64,6 @@ public class PostController {
     @RequestMapping("/own")
     public R ownPostList(@RequestParam Map<String, Object> params){
         Long userId = Long.parseLong((String) params.get("userId"));
-
         PageUtils page=postService.queryOwnPage(params,userId);
         return R.ok().put("page",page);
     }
@@ -86,6 +85,8 @@ public class PostController {
      */
     @PostMapping("/save")
     public R save(@RequestBody PostDto post){
+//        System.out.println(post);
+//        return R.ok();
         postService.savePost(post.getUserId(), post);
         return R.ok().put("postStatus", PostConstant.PostEnum.SUCCESS.getCode()).put("msg",PostConstant.PostEnum.SUCCESS.getMsg());
     }
