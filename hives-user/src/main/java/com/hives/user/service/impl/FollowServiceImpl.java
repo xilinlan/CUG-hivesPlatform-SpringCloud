@@ -58,6 +58,9 @@ public class FollowServiceImpl extends ServiceImpl<FollowDao, FollowEntity> impl
             FollowerVo followerVo = new FollowerVo();
             followerVo.setNickname(item.getNickname());
             followerVo.setHeader(item.getHeader());
+            followerVo.setTargetId(item.getId());
+            followerVo.setUserId(userId);
+            followerVo.setId(entityList.stream().filter(entity -> entity.getTargetId().equals(item.getId())).findFirst().get().getId());
             return followerVo;
         }).collect(Collectors.toList());
 
