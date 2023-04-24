@@ -2,9 +2,7 @@ package com.hives.chat.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +18,7 @@ import java.util.stream.LongStream;
  * @Description:
  */
 @RestController
+@RequestMapping("/chat")
 public class PullMessageController {
 
     private RedisTemplate redis;
@@ -29,7 +28,7 @@ public class PullMessageController {
         this.redis = redis;
     }
 
-    @PostMapping("/pullMsg")
+    @GetMapping("/pullMsg")
     public List<Object> pullMsg(@RequestParam("fromId") Long from, @RequestParam("toId") Long to) {
         // 根据两人的 id 生成键，并到 redis 中获取
         String key = LongStream.of(from, to)

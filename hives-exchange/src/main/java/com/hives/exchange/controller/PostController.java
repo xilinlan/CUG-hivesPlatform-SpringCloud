@@ -107,7 +107,8 @@ public class PostController {
     @RequestMapping("/delete")
     public R delete(@RequestBody Long[] ids){
         // 批量逻辑删除帖子，可以传任意数量的帖子
-        postService.logicRemoveByIds(Arrays.asList(ids));
+        System.out.println(ids);
+        //postService.logicRemoveByIds(Arrays.asList(ids));
         return R.ok();
     }
 
