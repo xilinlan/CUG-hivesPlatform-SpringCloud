@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.hives.common.utils.PageUtils;
 import com.hives.exchange.dto.PostDto;
 import com.hives.exchange.entity.PostEntity;
+import com.hives.exchange.entity.ReplyEntity;
 import com.hives.exchange.vo.PostVo;
 
 import java.util.List;
@@ -32,5 +33,7 @@ public interface PostService extends IService<PostEntity> {
     void logicRemoveByIds(List<Long> asList);
 
     void updatePostUpdateTime(Long postId);
+
+    void removeReply(Long postId);
 }
 

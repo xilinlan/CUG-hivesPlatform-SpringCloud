@@ -56,6 +56,8 @@ public class PostLikesServiceImpl extends ServiceImpl<PostLikesDao, PostLikesEnt
             PostLikesEntity postLikesEntity = new PostLikesEntity();
             postLikesEntity.setUserId(userId);
             postLikesEntity.setPostId(postId);
+            post.setLikes(likes+1);
+            postService.updateById(post);
             this.save(postLikesEntity);
             return;
         }

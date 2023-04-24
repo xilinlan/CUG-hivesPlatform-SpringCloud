@@ -232,7 +232,11 @@ public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements
                 postImagesService.removeImagesByPostId(item.getId());
             },threadPoolExecutor);
 
-            CompletableFuture<Void> cfAll = CompletableFuture.allOf(postFuture, collectsFuture, likesFuture,imagesFuture);
+            CompletableFuture<Void>videoFuture=CompletableFuture.runAsync(()->{
+                postVideoService.removeVideoByPostId(item.getId());
+            },threadPoolExecutor);
+
+            CompletableFuture<Void> cfAll = CompletableFuture.allOf(postFuture, collectsFuture, likesFuture,imagesFuture,videoFuture);
             try {
                 cfAll.get();
             } catch (InterruptedException | ExecutionException e) {
@@ -248,6 +252,15 @@ public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements
     @Override
     public void updatePostUpdateTime(Long postId) {
         PostEntity post = this.getById(postId);
+        post.setReply(post.getReply()+1);
+        post.setUpdateTime(new Date());
+        this.updateById(post);
+    }
+
+    @Override
+    public void removeReply(Long postId) {
+        PostEntity post = this.getById(postId);
+        post.setReply(post.getReply()-1);
         post.setUpdateTime(new Date());
         this.updateById(post);
     }

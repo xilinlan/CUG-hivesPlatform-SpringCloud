@@ -134,6 +134,7 @@ public class ReplyServiceImpl extends ServiceImpl<ReplyDao, ReplyEntity> impleme
         this.updateById(item);
         this.logicRemoveReplyByReply1Id(item.getId());
         this.logicRemoveReplyByReplyId(item.getId());
+        postService.removeReply(item.getPostId());
     }
 
     private void logicRemoveReplyByReplyId(Long replyId) {

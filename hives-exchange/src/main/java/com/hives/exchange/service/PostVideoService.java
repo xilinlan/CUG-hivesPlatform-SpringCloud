@@ -12,4 +12,5 @@ import com.hives.exchange.entity.PostVideoEntity;
  * @Description:
  */
 public interface PostVideoService extends IService<PostVideoEntity> {
+    void removeVideoByPostId(Long postId);
 }
