@@ -14,7 +14,6 @@ import com.hives.exchange.entity.PostLikesEntity;
 import com.hives.exchange.feign.UserFeignService;
 import com.hives.exchange.service.*;
 import com.hives.exchange.vo.PostVo;
-import netscape.javascript.JSObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;

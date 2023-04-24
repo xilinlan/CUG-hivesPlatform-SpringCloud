@@ -64,6 +64,8 @@ public class PostCollectsServiceImpl extends ServiceImpl<PostCollectsDao, PostCo
             PostCollectsEntity postCollectsEntity = new PostCollectsEntity();
             postCollectsEntity.setUserId(userId);
             postCollectsEntity.setPostId(postId);
+            post.setCollects(collects+1);
+            postService.updateById(post);
             this.save(postCollectsEntity);
             return;
         }
