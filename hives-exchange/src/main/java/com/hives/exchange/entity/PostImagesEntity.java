@@ -36,5 +36,9 @@ public class PostImagesEntity implements Serializable {
 	 * 排序
 	 */
 	private Integer sort;
+	/**
+	 * 是否删除
+	 */
+	private Integer isDeleted;
 
 }

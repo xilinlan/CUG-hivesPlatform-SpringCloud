@@ -24,5 +24,8 @@ public interface PostCollectsService extends IService<PostCollectsEntity> {
     void updateCollects(Long userId, Long postId);
 
     PageUtils getUserCollects(Map<String, Object> params, Long userId);
+
+    void removePostCollectsByPostId(Long postId);
+
 }
 

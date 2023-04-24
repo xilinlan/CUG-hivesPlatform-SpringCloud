@@ -31,7 +31,7 @@ public class FollowEntity implements Serializable {
 	/**
 	 * 被关注用户ID
 	 */
-	private String targetId;
+	private Long targetId;
 	/**
 	 * 是否删除
 	 */

@@ -20,5 +20,7 @@ public interface PostLikesService extends IService<PostLikesEntity> {
     PostLikesEntity isLike(Long userId, Long id);
 
     void updatePostLikes(Long userId,Long postId);
+
+    void removePostLikesByPostId(Long postId);
 }
 
