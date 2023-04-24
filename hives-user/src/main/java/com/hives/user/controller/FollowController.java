@@ -7,6 +7,7 @@ import java.util.Map;
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.R;
 import com.hives.user.vo.FollowerVo;
+import com.hives.user.vo.OtherUserVo;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -59,6 +60,12 @@ public class FollowController {
         return R.ok().put("follow", follow);
     }
 
+    @GetMapping("/getOtherUserInfo")
+    //@RequiresPermissions("user:follow:info")
+    public R getOtherUserInfo(@RequestParam("userId") Long userId, @RequestParam("targetId") Long targetId){
+        OtherUserVo otherUserInfo = followService.getOtherUserInfo(userId, targetId);
+        return R.ok().put("otherUserInfo", otherUserInfo);
+    }
     /**
      * 保存
      */
