@@ -3,6 +3,7 @@ package com.hives.user.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hives.common.utils.PageUtils;
 import com.hives.user.entity.FollowEntity;
+import com.hives.user.vo.FollowerVo;
 
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,6 @@ public interface FollowService extends IService<FollowEntity> {
      * @param userId
      * @return 关注对象
      */
-    List<FollowEntity> getFollow(Long userId);
+    List<FollowerVo> getFollow(Long userId);
 }
 

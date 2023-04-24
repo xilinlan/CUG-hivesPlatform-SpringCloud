@@ -19,6 +19,6 @@ import java.util.List;
 
 @FeignClient("hives-user-lxl")
 public interface UserFeignService {
-    @PostMapping("/user/follow/getFollows")
+    @GetMapping("/user/follow/getFollows")
     R getFriends(@RequestParam("userId") Long uid);
 }
