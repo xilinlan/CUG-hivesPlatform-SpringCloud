@@ -1,5 +1,6 @@
 package com.hives.user.service.impl;
 
+import com.hives.common.exception.RRException;
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.Query;
 import com.hives.user.entity.UserEntity;
@@ -19,8 +20,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 
 import com.hives.user.dao.FollowDao;
+import com.hives.user.vo.FollowerVo;
 import com.hives.user.entity.FollowEntity;
 import com.hives.user.service.FollowService;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -44,7 +47,7 @@ public class FollowServiceImpl extends ServiceImpl<FollowDao, FollowEntity> impl
 
     @Override
     public List<FollowerVo> getFollow(Long userId) {
-        List<FollowEntity> entityList = this.list(new QueryWrapper<FollowEntity>().eq("user_id", userId));
+        List<FollowEntity> entityList = this.list(new QueryWrapper<FollowEntity>().eq("user_id", userId).eq("is_deleted", 0));
 
         List<Long> targetIdList = entityList.stream().map(item -> {
             return item.getTargetId();
@@ -97,4 +100,43 @@ public class FollowServiceImpl extends ServiceImpl<FollowDao, FollowEntity> impl
         return otherUserVo;
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void saveFollow(FollowEntity follow) {
+        FollowEntity followEntity = this.getOne(new QueryWrapper<FollowEntity>().eq("user_id", follow.getUserId()).eq("target_id", follow.getTargetId()));
+
+        if(followEntity==null){
+            this.save(follow);
+        }else if(followEntity.getIsDeleted()==1){
+            followEntity.setIsDeleted(0);
+            this.updateById(followEntity);
+        }else{
+            throw new RRException("系统繁忙，请稍后再试",11000);
+        }
+        UserEntity user = userService.getById(follow.getUserId());
+        UserEntity targetUser=userService.getById(follow.getTargetId());
+        user.setFollowCount(user.getFollowCount()+1);
+        targetUser.setFansCount(targetUser.getFansCount()+1);
+        userService.updateById(user);
+        userService.updateById(targetUser);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteFollow(FollowEntity follow) {
+        FollowEntity followEntity = this.getOne(new QueryWrapper<FollowEntity>().eq("user_id", follow.getUserId()).eq("target_id", follow.getTargetId()));
+
+        if (followEntity != null) {
+            followEntity.setIsDeleted(1);
+            this.updateById(followEntity);
+        }
+
+        UserEntity user = userService.getById(follow.getUserId());
+        UserEntity targetUser=userService.getById(follow.getTargetId());
+        user.setFollowCount(user.getFollowCount()-1);
+        targetUser.setFansCount(targetUser.getFansCount()-1);
+        userService.updateById(user);
+        userService.updateById(targetUser);
+
+    }
 }

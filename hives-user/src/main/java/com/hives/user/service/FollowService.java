@@ -39,5 +39,9 @@ public interface FollowService extends IService<FollowEntity> {
      * @return 关注对象信息以及关注状态
      */
     OtherUserVo getOtherUserInfo(Long userId, Long targetId);
+
+    void saveFollow(FollowEntity follow);
+
+    void deleteFollow(FollowEntity follow);
 }
 

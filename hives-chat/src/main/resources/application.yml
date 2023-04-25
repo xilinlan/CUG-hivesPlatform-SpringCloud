@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/hives_user?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2B8
+    hikari:
+      max-lifetime: 600000
+      maximum-pool-size: 10
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 124.223.20.95:8848
+  redis:
+    host: 1.117.105.39
+    port: 6124
+  data:
+    mongodb:
+      uri: mongodb://hives:hives123456@1.117.105.39:27020/hives-chat?authSource=admin
+server:
+  port: 14000
+
+
