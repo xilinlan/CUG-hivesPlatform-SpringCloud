@@ -69,13 +69,12 @@ public class FollowController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
-    //@RequiresPermissions("user:follow:save")
+    @PostMapping("/save")
     public R save(@RequestBody FollowEntity follow){
-		followService.save(follow);
-
+        followService.saveFollow(follow);
         return R.ok();
     }
+
 
     /**
      * 修改
@@ -91,10 +90,10 @@ public class FollowController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
     //@RequiresPermissions("user:follow:delete")
-    public R delete(@RequestBody Long[] ids){
-		followService.removeByIds(Arrays.asList(ids));
+    public R delete(@RequestBody FollowEntity follow){
+		followService.deleteFollow(follow);
 
         return R.ok();
     }

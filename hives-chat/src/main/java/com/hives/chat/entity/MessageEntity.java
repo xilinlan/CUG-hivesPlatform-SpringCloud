@@ -2,6 +2,9 @@ package com.hives.chat.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
@@ -13,7 +16,10 @@ import java.util.Date;
  * @Description:
  */
 @Data
+@Document("Message")
 public class MessageEntity {
+    @Id
+    private ObjectId id;
     /**
      * 发送者id
      */
@@ -33,6 +39,6 @@ public class MessageEntity {
     /**
      * 消息时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(locale = "zh", timezone = "Asia/Shanghai",pattern = "yyyy-MM-dd HH:mm:ss")
     private Date time;
 }
