@@ -47,7 +47,7 @@ public class FollowServiceImpl extends ServiceImpl<FollowDao, FollowEntity> impl
 
     @Override
     public List<FollowerVo> getFollow(Long userId) {
-        List<FollowEntity> entityList = this.list(new QueryWrapper<FollowEntity>().eq("user_id", userId));
+        List<FollowEntity> entityList = this.list(new QueryWrapper<FollowEntity>().eq("user_id", userId).eq("is_deleted", 0));
 
         List<Long> targetIdList = entityList.stream().map(item -> {
             return item.getTargetId();
@@ -107,7 +107,7 @@ public class FollowServiceImpl extends ServiceImpl<FollowDao, FollowEntity> impl
 
         if(followEntity==null){
             this.save(follow);
-        }else if(followEntity.getIsDeleted()==0){
+        }else if(followEntity.getIsDeleted()==1){
             followEntity.setIsDeleted(0);
             this.updateById(followEntity);
         }else{
