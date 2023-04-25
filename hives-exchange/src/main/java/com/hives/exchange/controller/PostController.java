@@ -46,10 +46,9 @@ public class PostController {
     }
 
     /**
-     * 列表
+     * 获取首页贴子，按PageUtils分页返回
      */
     @RequestMapping("/list")
-    //@RequiresPermissions("exchange:post:list")
     public R list(@RequestParam Map<String, Object> params) throws ExecutionException, InterruptedException {
         Long userId = Long.parseLong((String) params.get("userId"));
         PageUtils page =postService.queryPostPage(params,userId);
@@ -57,9 +56,21 @@ public class PostController {
         return R.ok().put("page", page);
     }
 
+    /**
+     * 获取个人发帖信息
+     * @param params
+     * @return
+     */
+    @RequestMapping("/own")
+    public R ownPostList(@RequestParam Map<String, Object> params){
+        Long userId = Long.parseLong((String) params.get("userId"));
+        PageUtils page=postService.queryOwnPage(params,userId);
+        return R.ok().put("page",page);
+    }
+
 
     /**
-     * 信息
+     * ；信息
      */
     @RequestMapping("/info/{id}")
     //@RequiresPermissions("exchange:post:info")
@@ -74,8 +85,9 @@ public class PostController {
      */
     @PostMapping("/save")
     public R save(@RequestBody PostDto post){
+//        System.out.println(post);
+//        return R.ok();
         postService.savePost(post.getUserId(), post);
-
         return R.ok().put("postStatus", PostConstant.PostEnum.SUCCESS.getCode()).put("msg",PostConstant.PostEnum.SUCCESS.getMsg());
     }
 
@@ -93,15 +105,9 @@ public class PostController {
      * 删除
      */
     @RequestMapping("/delete")
-    //@RequiresPermissions("exchange:post:delete")
     public R delete(@RequestBody Long[] ids){
-        for (Long id:
-             ids) {
-            System.out.println(id);
-        }
-
-		postService.removeByIds(Arrays.asList(ids));
-
+        // 批量逻辑删除帖子，可以传任意数量的帖子
+        postService.logicRemoveByIds(Arrays.asList(ids));
         return R.ok();
     }
 

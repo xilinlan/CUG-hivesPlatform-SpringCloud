@@ -11,7 +11,7 @@ import lombok.Data;
 
 /**
  * 用户
- * 
+ *
  * @author zhangtao
  * @email 2298805496@qq.com
  * @date 2023-03-30 14:10:36
@@ -52,6 +52,10 @@ public class UserEntity implements Serializable {
 	 */
 	private String header;
 	/**
+	 * 主页背景
+	 */
+	private String background;
+	/**
 	 * 邮箱
 	 */
 	private String email;
@@ -79,9 +83,5 @@ public class UserEntity implements Serializable {
 	 */
 	private Integer followCount;
 
-	/**
-	 * 背景图片
-	 */
-	private String background;
 
 }

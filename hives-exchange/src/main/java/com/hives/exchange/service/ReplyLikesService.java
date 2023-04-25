@@ -16,5 +16,7 @@ import java.util.Map;
 public interface ReplyLikesService extends IService<ReplyLikesEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    void removeByReplyId(Long replyId);
 }
 

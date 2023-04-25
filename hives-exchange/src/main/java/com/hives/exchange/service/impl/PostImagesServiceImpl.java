@@ -39,4 +39,14 @@ public class PostImagesServiceImpl extends ServiceImpl<PostImagesDao, PostImages
         return collect;
     }
 
+    @Override
+    public void removeImagesByPostId(Long postId) {
+        List<PostImagesEntity> imagesEntityList = this.list(new QueryWrapper<PostImagesEntity>().eq("post_id", postId));
+        List<PostImagesEntity> collect = imagesEntityList.stream().map(item -> {
+            item.setIsDeleted(1);
+            return item;
+        }).collect(Collectors.toList());
+        this.updateBatchById(collect);
+    }
+
 }
