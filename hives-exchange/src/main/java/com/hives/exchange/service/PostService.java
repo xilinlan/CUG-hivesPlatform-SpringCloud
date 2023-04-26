@@ -35,5 +35,7 @@ public interface PostService extends IService<PostEntity> {
     void updatePostUpdateTime(Long postId);
 
     void removeReply(Long postId);
+
+    PageUtils getFollowPost(Map<String, Object> params , Long userId);
 }
 

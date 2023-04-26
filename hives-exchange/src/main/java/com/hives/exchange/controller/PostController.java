@@ -111,4 +111,11 @@ public class PostController {
         return R.ok();
     }
 
+    @GetMapping("/getFollowPost")
+    public R getFollowPost(@RequestParam Map<String, Object> params){
+        Long userId = Long.parseLong((String) params.get("userId"));
+        PageUtils page=postService.getFollowPost(params,userId);
+        return R.ok().put("page",page);
+    }
+
 }
