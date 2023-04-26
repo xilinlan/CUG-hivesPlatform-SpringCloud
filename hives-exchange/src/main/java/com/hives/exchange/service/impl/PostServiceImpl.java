@@ -3,6 +3,7 @@ package com.hives.exchange.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hives.common.constant.PostConstant;
+import com.hives.common.to.FollowTo;
 import com.hives.common.to.UserTo;
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.Query;
@@ -21,6 +22,7 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -74,6 +76,7 @@ public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements
 
     @Override
     @CacheRemove(value = "postCache", key="queryPostPage_")
+    @Transactional(rollbackFor = Exception.class)
     public void savePost(Long userId,PostDto post) {
         PostEntity postEntity=new PostEntity();
         BeanUtils.copyProperties(post,postEntity);
@@ -147,11 +150,26 @@ public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements
             PostVo postVo = new PostVo();
             BeanUtils.copyProperties(item, postVo);
 
+
+            List<String>video=null;
             // Completable异步查询数据库表并完成数据的组装，包括图片表，用户信息表，是否关注和是否收藏
-            CompletableFuture<Void>imagesFuture=CompletableFuture.runAsync(()->{
+            CompletableFuture<List<String>>imagesFuture=CompletableFuture.supplyAsync(()->{
                 List<String>images=postImagesService.getImages(item.getId());
-                postVo.setUrls(images);
+                return images;
             },threadPoolExecutor);
+
+            CompletableFuture<List<String>>videoFuture=CompletableFuture.supplyAsync(()->{
+                List<String>vedios=postVideoService.getVideos(item.getId());
+                return vedios;
+            },threadPoolExecutor);
+
+            CompletableFuture<Void>urlsFuture=imagesFuture.thenAcceptBoth(videoFuture,(images,videos)->{
+                if(PostConstant.PostTypeEnum.COMMON.getCode()==item.getType()){
+                    postVo.setUrls(images);
+                }else{
+                    postVo.setUrls(videos);
+                }
+            });
 
             CompletableFuture<Void>userFuture=CompletableFuture.runAsync(()->{
                 UserTo userTo = userFeignService.userInfo(item.getUserId());
@@ -173,7 +191,7 @@ public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements
 
 
             try {
-                CompletableFuture.allOf(imagesFuture,userFuture,postLoveFuture,postCollectFuture).get();
+                CompletableFuture.allOf(urlsFuture,userFuture,postLoveFuture,postCollectFuture).get();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             } catch (ExecutionException e) {
@@ -262,6 +280,26 @@ public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements
         post.setReply(post.getReply()-1);
         post.setUpdateTime(new Date());
         this.updateById(post);
+    }
+
+    @Override
+    public PageUtils getFollowPost(Map<String, Object> params,Long userId) {
+        List<FollowTo> follow = userFeignService.getFollowFromOtherService(userId);
+        List<Long> collect = follow.stream().map(item -> {
+            return item.getTargetId();
+        }).collect(Collectors.toList());
+
+        IPage<PostEntity> page = this.page(
+                new Query<PostEntity>().getPage(params),
+                new QueryWrapper<PostEntity>().in("user_id",collect).eq("is_deleted",0).orderByDesc("create_time")
+        );
+        List<PostEntity> records = page.getRecords();
+        PageUtils pageUtils=new PageUtils();
+
+        List<PostVo> postVoList = getPostVoList(userId, records);
+        pageUtils.setList(postVoList);
+
+        return pageUtils;
     }
 }
 

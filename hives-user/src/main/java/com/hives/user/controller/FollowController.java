@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import com.hives.common.to.FollowTo;
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.R;
 import com.hives.user.vo.FollowerVo;
@@ -35,7 +36,6 @@ public class FollowController {
      * 列表
      */
     @RequestMapping("/list")
-    //@RequiresPermissions("user:follow:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = followService.queryPage(params);
 
@@ -43,7 +43,6 @@ public class FollowController {
     }
 
     @GetMapping("/getFollows")
-    //@RequiresPermissions("user:follow:list")
     public R getFollow(@RequestParam("userId") Long userId){
         List<FollowerVo> follow = followService.getFollow(userId);
         return R.ok().put("follow", follow);
@@ -96,6 +95,12 @@ public class FollowController {
 		followService.deleteFollow(follow);
 
         return R.ok();
+    }
+
+    @GetMapping("/getFromOtherService/{userId}")
+    public List<FollowTo> getFollowFromOtherService(@PathVariable("userId")Long userId){
+        List<FollowTo>followToList=followService.getFollowTo(userId);
+        return followToList;
     }
 
 }

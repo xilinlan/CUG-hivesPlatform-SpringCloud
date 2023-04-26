@@ -31,4 +31,11 @@ public class PostVideoServiceImpl extends ServiceImpl<PostVideoDao, PostVideoEnt
         }).collect(Collectors.toList());
         this.updateBatchById(collect);
     }
+
+    @Override
+    public List<String> getVideos(Long postId) {
+        List<PostVideoEntity> list = this.list(new QueryWrapper<PostVideoEntity>().eq("post_id", postId).eq("is_deleted", 0));
+        List<String> collect = list.stream().map(item -> item.getUrl()).collect(Collectors.toList());
+        return collect;
+    }
 }

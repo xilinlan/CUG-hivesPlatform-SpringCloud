@@ -1,12 +1,14 @@
 package com.hives.user.service.impl;
 
 import com.hives.common.exception.RRException;
+import com.hives.common.to.FollowTo;
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.Query;
 import com.hives.user.entity.UserEntity;
 import com.hives.user.service.UserService;
 import com.hives.user.vo.FollowerVo;
 import com.hives.user.vo.OtherUserVo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,7 +49,7 @@ public class FollowServiceImpl extends ServiceImpl<FollowDao, FollowEntity> impl
 
     @Override
     public List<FollowerVo> getFollow(Long userId) {
-        List<FollowEntity> entityList = this.list(new QueryWrapper<FollowEntity>().eq("user_id", userId).eq("is_deleted", 0));
+        List<FollowEntity> entityList = this.list(new QueryWrapper<FollowEntity>().eq("user_id", userId).eq("is_deleted",0));
 
         List<Long> targetIdList = entityList.stream().map(item -> {
             return item.getTargetId();
@@ -138,5 +140,16 @@ public class FollowServiceImpl extends ServiceImpl<FollowDao, FollowEntity> impl
         userService.updateById(user);
         userService.updateById(targetUser);
 
+    }
+
+    @Override
+    public List<FollowTo> getFollowTo(Long userId) {
+        List<FollowEntity> list = this.list(new QueryWrapper<FollowEntity>().eq("user_id", userId).eq("is_deleted", 0));
+        List<FollowTo> collect = list.stream().map(item -> {
+            FollowTo followTo = new FollowTo();
+            BeanUtils.copyProperties(item, followTo);
+            return followTo;
+        }).collect(Collectors.toList());
+        return collect;
     }
 }
