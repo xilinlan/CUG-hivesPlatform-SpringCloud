@@ -83,7 +83,7 @@ public class ReplyServiceImpl extends ServiceImpl<ReplyDao, ReplyEntity> impleme
     public List<Reply1Vo> getFirstLevelComments(Long postId) throws ExecutionException, InterruptedException {
         List<Reply1Vo> reply1VoList=new ArrayList<>();
         // 取出所有的回复，供下面的代码对回复进行封装
-        List<ReplyEntity> replyEntityList = this.list(new QueryWrapper<ReplyEntity>().eq("post_id", postId));
+        List<ReplyEntity> replyEntityList = this.list(new QueryWrapper<ReplyEntity>().eq("post_id", postId).eq("is_deleted",0));
         Map<Long,Integer>Reply1LocMap=new HashMap<>();
 
         // 逐一遍历ReplyEntity对象

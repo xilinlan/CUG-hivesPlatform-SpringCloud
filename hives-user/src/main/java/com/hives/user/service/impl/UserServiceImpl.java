@@ -1,8 +1,10 @@
 package com.hives.user.service.impl;
 
+import com.hives.common.to.UserTo;
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.Query;
 import com.hives.user.config.MailConfig;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Map;
@@ -55,6 +57,14 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
     public Boolean checkEmail(String email) {
         UserEntity userEntity = this.getOne(new QueryWrapper<UserEntity>().eq("email", email));
         return userEntity != null;
+    }
+
+    @Override
+    public UserTo getUserByEmail(String email) {
+        UserEntity user = this.getOne(new QueryWrapper<UserEntity>().eq("email", email));
+        UserTo userTo=new UserTo();
+        BeanUtils.copyProperties(user,userTo);
+        return userTo;
     }
 
     @Override
