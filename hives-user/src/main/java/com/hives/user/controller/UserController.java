@@ -74,8 +74,14 @@ public class UserController {
     @PostMapping("/register")
     public R register(@RequestBody UserEntity user) {
         // 接收注册信息，将其存储到数据库表中
-        userService.register(user);
-        return R.ok().put("regStatus",UserConstant.RegisterEnum.SUCCESS).put("msg",UserConstant.RegisterEnum.SUCCESS.getMsg());
+        // 检查邮箱是否存在
+        Boolean checkEmail = userService.checkEmail(user.getEmail());
+        if(checkEmail){
+            return R.ok().put("regStatus",UserConstant.RegisterEnum.EXISTS.getCode()).put("msg",UserConstant.RegisterEnum.EXISTS.getMsg());
+        }else{
+            userService.register(user);
+            return R.ok().put("regStatus",UserConstant.RegisterEnum.SUCCESS.getCode()).put("msg",UserConstant.RegisterEnum.SUCCESS.getMsg());
+        }
     }
 
     /**
