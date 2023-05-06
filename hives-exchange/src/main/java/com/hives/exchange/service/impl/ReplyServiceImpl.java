@@ -3,6 +3,7 @@ package com.hives.exchange.service.impl;
 import com.hives.common.to.UserTo;
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.Query;
+import com.hives.exchange.config.CacheRemove;
 import com.hives.exchange.feign.UserFeignService;
 import com.hives.exchange.service.PostService;
 import com.hives.exchange.service.ReplyLikesService;
@@ -12,6 +13,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -57,7 +59,10 @@ public class ReplyServiceImpl extends ServiceImpl<ReplyDao, ReplyEntity> impleme
     }
 
     @Override
-    @CacheEvict(value = "replyCache",key="'getFirstLevelComments'+#reply.getPostId()")
+    @Caching(evict={
+            @CacheEvict(value = "postCache", allEntries = true),
+            @CacheEvict(value = "replyCache",key="'getFirstLevelComments'+#reply.getPostId()")
+    })
     public ReplyEntity saveReply(ReplyEntity reply) {
         reply.setCreateTime(new Date());
         postService.updatePostUpdateTime(reply.getPostId());
@@ -78,7 +83,7 @@ public class ReplyServiceImpl extends ServiceImpl<ReplyDao, ReplyEntity> impleme
     public List<Reply1Vo> getFirstLevelComments(Long postId) throws ExecutionException, InterruptedException {
         List<Reply1Vo> reply1VoList=new ArrayList<>();
         // 取出所有的回复，供下面的代码对回复进行封装
-        List<ReplyEntity> replyEntityList = this.list(new QueryWrapper<ReplyEntity>().eq("post_id", postId));
+        List<ReplyEntity> replyEntityList = this.list(new QueryWrapper<ReplyEntity>().eq("post_id", postId).eq("is_deleted",0));
         Map<Long,Integer>Reply1LocMap=new HashMap<>();
 
         // 逐一遍历ReplyEntity对象

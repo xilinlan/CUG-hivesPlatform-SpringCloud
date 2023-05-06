@@ -5,6 +5,8 @@ import java.util.Map;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hives.common.constant.UserConstant;
 import com.hives.common.to.UserTo;
@@ -23,6 +25,10 @@ import org.springframework.web.bind.annotation.*;
 import com.hives.user.entity.UserEntity;
 import com.hives.user.service.UserService;
 import javax.annotation.Resource;
+import javax.jws.soap.SOAPBinding;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.websocket.server.PathParam;
 
 
 /**
@@ -202,11 +208,25 @@ public class UserController {
         return R.ok();
     }
 
-    @GetMapping("/exception/test")
-    public R test(){
-        log.info("进入函数");
-        int a=10/0;
-        return R.ok();
+    @GetMapping("/getUserByEmail")
+    public UserTo UserByEmail(@PathParam("email") String email){
+        UserTo user=userService.getUserByEmail(email);
+        return user;
     }
 
+    @GetMapping("/infoByToken")
+    public R userInfo(HttpServletRequest request){
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie:cookies){
+            System.out.println(cookie.getValue());
+            if(cookie.getName().equals("token")){
+                String user = stringRedisTemplate.opsForValue().get(cookie.getValue());
+                System.out.println(user);
+                UserTo userTo = JSON.parseObject(user, UserTo.class);
+                System.out.println(userTo);
+                return R.ok().put("user",userTo);
+            }
+        }
+        return R.error();
+    }
 }

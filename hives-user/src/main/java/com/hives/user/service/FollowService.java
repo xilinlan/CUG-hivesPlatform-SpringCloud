@@ -1,6 +1,7 @@
 package com.hives.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.hives.common.to.FollowTo;
 import com.hives.common.utils.PageUtils;
 import com.hives.user.entity.FollowEntity;
 import com.hives.user.vo.OtherUserVo;
@@ -43,5 +44,7 @@ public interface FollowService extends IService<FollowEntity> {
     void saveFollow(FollowEntity follow);
 
     void deleteFollow(FollowEntity follow);
+
+    List<FollowTo> getFollowTo(Long userId);
 }
 

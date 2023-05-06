@@ -3,6 +3,8 @@ package com.hives.exchange.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hives.exchange.entity.PostVideoEntity;
 
+import java.util.List;
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,4 +15,6 @@ import com.hives.exchange.entity.PostVideoEntity;
  */
 public interface PostVideoService extends IService<PostVideoEntity> {
     void removeVideoByPostId(Long postId);
+
+    List<String> getVideos(Long postId);
 }

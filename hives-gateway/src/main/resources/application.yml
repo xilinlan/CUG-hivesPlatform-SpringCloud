@@ -1,0 +1,8 @@
+spring:
+  redis:
+    host: 1.117.105.39
+    port: 6124
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 124.223.20.95:8848

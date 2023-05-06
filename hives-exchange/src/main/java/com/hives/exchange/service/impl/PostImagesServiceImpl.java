@@ -34,7 +34,7 @@ public class PostImagesServiceImpl extends ServiceImpl<PostImagesDao, PostImages
 
     @Override
     public List<String> getImages(Long id) {
-        List<PostImagesEntity> postImagesEntityList = this.list(new QueryWrapper<PostImagesEntity>().eq("post_id", id));
+        List<PostImagesEntity> postImagesEntityList = this.list(new QueryWrapper<PostImagesEntity>().eq("post_id", id).eq("is_deleted",0));
         List<String> collect = postImagesEntityList.stream().map(item -> item.getUrl()).collect(Collectors.toList());
         return collect;
     }

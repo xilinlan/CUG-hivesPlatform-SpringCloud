@@ -57,6 +57,10 @@ public class PostVo {
      */
     private Long reply;
     /**
+     * 类型
+     */
+    private Integer type;
+    /**
      * 收藏
      */
     private Long collects;
