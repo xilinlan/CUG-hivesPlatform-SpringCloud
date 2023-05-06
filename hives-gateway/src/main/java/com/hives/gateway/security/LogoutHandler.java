@@ -26,7 +26,9 @@ public class LogoutHandler implements ServerLogoutHandler {
         try {
             if (cookie != null) {
                 Map<String,Object> userMap= JWTUtils.getTokenInfo(cookie.getValue());
+                String username = (String) redisTemplate.opsForValue().get((String) userMap.get("username"));
                 redisTemplate.delete((String) userMap.get("username"));
+                redisTemplate.delete(username);
             }
         }catch (JWTDecodeException e) {
            return Mono.error(e);

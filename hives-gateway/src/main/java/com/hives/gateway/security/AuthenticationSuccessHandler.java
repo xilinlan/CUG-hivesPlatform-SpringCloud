@@ -55,19 +55,22 @@ public class AuthenticationSuccessHandler extends WebFilterChainServerAuthentica
             load.put("username",authentication.getName());
             load.put("role",list.get(0).getAuthority());//这里只添加了一种角色 实际上用户可以有不同的角色类型
             String token;
+            SecurityUserDetails securityUserDetails= (SecurityUserDetails) authentication.getPrincipal();
             log.info(authentication.toString());
             if (remember_me==null) {
                 token= JWTUtils.creatToken(load,3600*24);
                 response.addCookie(ResponseCookie.from("token", token).path("/").build());
                 //maxAge默认-1 浏览器关闭cookie失效
                 redisTemplate.opsForValue().set(authentication.getName(), token, 1, TimeUnit.DAYS);
+                System.out.println(token+"  "+securityUserDetails.getUser());
+                redisTemplate.opsForValue().set(token,securityUserDetails.getUser(),1,TimeUnit.DAYS);
             }else {
                 token=JWTUtils.creatToken(load,3600*24*180);
                 response.addCookie(ResponseCookie.from("token", token).maxAge(Duration.ofDays(rememberMe)).path("/").build());
-                redisTemplate.opsForValue().set(authentication.getName(), token, rememberMe, TimeUnit.SECONDS);//保存180天
+                //保存180天
+                redisTemplate.opsForValue().set(authentication.getName(), token, rememberMe, TimeUnit.SECONDS);
+                redisTemplate.opsForValue().set(token,securityUserDetails.getUser(),rememberMe,TimeUnit.SECONDS);
             }
-            SecurityUserDetails securityUserDetails= (SecurityUserDetails) authentication.getPrincipal();
-            System.out.println(securityUserDetails.getUser());
             map.put("code", "000220");
             map.put("message", "登录成功");
             map.put("token",token);
