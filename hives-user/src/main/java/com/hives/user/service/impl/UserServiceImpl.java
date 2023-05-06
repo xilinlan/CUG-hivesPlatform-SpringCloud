@@ -4,6 +4,7 @@ import com.hives.common.to.UserTo;
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.Query;
 import com.hives.user.config.MailConfig;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,7 +48,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
     @Override
     public UserEntity register(UserEntity user) {
         String password = user.getPassword();
-        password = DigestUtils.md5DigestAsHex(password.getBytes());
+        password= BCrypt.hashpw(password,BCrypt.gensalt());
         user.setPassword(password);
         this.save(user);
         return user;
