@@ -69,6 +69,13 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
     }
 
     @Override
+    public Boolean checkEmailFormat(String email) {
+        // 邮箱格式校验
+        String regex = "^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$";
+        return email.matches(regex);
+    }
+
+    @Override
     public Integer updatePassword(UserEntity user) {
         String password = user.getPassword();
         password = DigestUtils.md5DigestAsHex(password.getBytes());

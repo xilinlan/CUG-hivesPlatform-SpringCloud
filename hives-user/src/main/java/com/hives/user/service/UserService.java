@@ -28,5 +28,7 @@ public interface UserService extends IService<UserEntity> {
 
 
     UserTo getUserByEmail(String email);
+
+    Boolean checkEmailFormat(String email);
 }
 
