@@ -1,6 +1,7 @@
 package com.hives.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.hives.common.to.UserTo;
 import com.hives.common.utils.PageUtils;
 import com.hives.user.entity.UserEntity;
 
@@ -26,5 +27,6 @@ public interface UserService extends IService<UserEntity> {
     Boolean checkEmail(String email);
 
 
+    UserTo getUserByEmail(String email);
 }
 

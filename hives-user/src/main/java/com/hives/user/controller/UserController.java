@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import com.hives.user.entity.UserEntity;
 import com.hives.user.service.UserService;
 import javax.annotation.Resource;
+import javax.websocket.server.PathParam;
 
 
 /**
@@ -202,11 +203,10 @@ public class UserController {
         return R.ok();
     }
 
-    @GetMapping("/exception/test")
-    public R test(){
-        log.info("进入函数");
-        int a=10/0;
-        return R.ok();
+    @GetMapping("/getUserByEmail")
+    public UserTo UserByEmail(@PathParam("email") String email){
+        UserTo user=userService.getUserByEmail(email);
+        return user;
     }
 
 }
