@@ -46,7 +46,7 @@ public class UserConstant {
     }
 
     public enum RegisterEnum{
-        FAIL(0,"注册失败"),SUCCESS(1,"注册成功");
+        FAIL(0,"注册失败"),SUCCESS(1,"注册成功"),EXISTS(2,"邮箱已存在");
 
         RegisterEnum(int code,String msg){
             this.code=code;
