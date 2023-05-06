@@ -3,11 +3,9 @@ package com.hives.user.controller;
 import java.util.Arrays;
 import java.util.Map;
 
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hives.common.constant.UserConstant;
 import com.hives.common.to.UserTo;
 import com.hives.common.utils.PageUtils;
@@ -18,14 +16,11 @@ import com.hives.user.feign.EmailFeignService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 import com.hives.user.entity.UserEntity;
 import com.hives.user.service.UserService;
 import javax.annotation.Resource;
-import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.websocket.server.PathParam;
