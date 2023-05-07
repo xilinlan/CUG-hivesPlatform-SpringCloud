@@ -1,5 +1,6 @@
 package com.hives.exchange.service.impl;
 
+import com.hives.common.exception.RRException;
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.Query;
 import com.hives.exchange.config.CacheRemove;
@@ -49,6 +50,9 @@ public class PostLikesServiceImpl extends ServiceImpl<PostLikesDao, PostLikesEnt
     @Transactional(rollbackFor = Exception.class)
     @CacheRemove(value = "postCache",key={"getUserCollects_","queryPostPage_"})
     public void updatePostLikes(Long userId,Long postId) {
+        if(userId==null||postId==null){
+            throw new RRException("参数不完整");
+        }
         PostEntity post = postService.getById(postId);
         Long likes = post.getLikes();
         PostLikesEntity likesEntity = this.getOne(new QueryWrapper<PostLikesEntity>().eq("user_id", userId).eq("post_id", postId));

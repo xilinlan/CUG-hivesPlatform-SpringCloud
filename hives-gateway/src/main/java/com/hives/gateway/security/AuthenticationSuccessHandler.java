@@ -59,7 +59,7 @@ public class AuthenticationSuccessHandler extends WebFilterChainServerAuthentica
             log.info(authentication.toString());
             if (remember_me==null) {
                 token= JWTUtils.creatToken(load,3600*24);
-                response.addCookie(ResponseCookie.from("token", token).path("/").build());
+                response.addCookie(ResponseCookie.from("token", token).maxAge(Duration.ofDays(1)).path("/").build());
                 //maxAge默认-1 浏览器关闭cookie失效
                 redisTemplate.opsForValue().set(authentication.getName(), token, 1, TimeUnit.DAYS);
                 System.out.println(token+"  "+securityUserDetails.getUser());
