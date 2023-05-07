@@ -5,7 +5,6 @@ import java.util.Map;
 
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.R;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;

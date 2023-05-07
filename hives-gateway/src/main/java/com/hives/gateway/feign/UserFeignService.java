@@ -16,7 +16,7 @@ import java.util.List;
  * @Date: 2023/04/14/16:07
  * @Description:
  */
-@FeignClient("hives-user-zt")
+@FeignClient("hives-user")
 public interface UserFeignService {
     @GetMapping("/user/user/getUserByEmail")
     UserTo UserByEmail(@RequestParam("email") String email);

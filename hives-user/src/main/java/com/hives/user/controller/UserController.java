@@ -3,9 +3,9 @@ package com.hives.user.controller;
 import java.util.Arrays;
 import java.util.Map;
 
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
+import com.alibaba.fastjson.JSON;
 import com.hives.common.constant.UserConstant;
 import com.hives.common.to.UserTo;
 import com.hives.common.utils.PageUtils;
@@ -16,13 +16,13 @@ import com.hives.user.feign.EmailFeignService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 import com.hives.user.entity.UserEntity;
 import com.hives.user.service.UserService;
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.websocket.server.PathParam;
 
 
@@ -74,8 +74,14 @@ public class UserController {
     @PostMapping("/register")
     public R register(@RequestBody UserEntity user) {
         // 接收注册信息，将其存储到数据库表中
-        userService.register(user);
-        return R.ok().put("regStatus",UserConstant.RegisterEnum.SUCCESS).put("msg",UserConstant.RegisterEnum.SUCCESS.getMsg());
+        // 检查邮箱是否存在
+        Boolean checkEmail = userService.checkEmail(user.getEmail());
+        if(checkEmail){
+            return R.ok().put("regStatus",UserConstant.RegisterEnum.EXISTS.getCode()).put("msg",UserConstant.RegisterEnum.EXISTS.getMsg());
+        }else{
+            userService.register(user);
+            return R.ok().put("regStatus",UserConstant.RegisterEnum.SUCCESS.getCode()).put("msg",UserConstant.RegisterEnum.SUCCESS.getMsg());
+        }
     }
 
     /**
@@ -87,7 +93,12 @@ public class UserController {
     @GetMapping("/sendCode")
     public R sendCode(@RequestParam String email){
         // 接收到请求，检查邮箱是否合法以及数据库中已经存在邮箱，生成验证码，当验证码生成并发送到邮件后，返回ok
+        // 检查邮箱是否合法
+        Boolean checkEmailFormat = userService.checkEmailFormat(email);
         Boolean checkEmail = userService.checkEmail(email);
+        if(!checkEmailFormat){
+            return R.ok().put("sendStatus", UserConstant.EmailEnum.ILLEGAL.getCode()).put("msg",UserConstant.EmailEnum.ILLEGAL.getMsg());
+        }
         if(checkEmail){
             return R.ok().put("sendStatus", UserConstant.EmailEnum.EXISTS.getCode()).put("msg",UserConstant.EmailEnum.EXISTS.getMsg());
         }
@@ -209,4 +220,19 @@ public class UserController {
         return user;
     }
 
+    @GetMapping("/infoByToken")
+    public R userInfo(HttpServletRequest request){
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie:cookies){
+            System.out.println(cookie.getValue());
+            if(cookie.getName().equals("token")){
+                String user = stringRedisTemplate.opsForValue().get(cookie.getValue());
+                System.out.println(user);
+                UserTo userTo = JSON.parseObject(user, UserTo.class);
+                System.out.println(userTo);
+                return R.ok().put("user",userTo);
+            }
+        }
+        return R.error();
+    }
 }
