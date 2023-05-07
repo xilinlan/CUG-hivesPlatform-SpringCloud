@@ -15,9 +15,15 @@ public class JWTUtils {
     private final static String SING="XIAOYUAN";
     public static String creatToken(Map<String,String> payload,int expireTime){
         JWTCreator.Builder builder= JWT.create();
-        Calendar instance=Calendar.getInstance();//获取日历对象
+        /**
+         * 获取日历对象
+         */
+        Calendar instance=Calendar.getInstance();
         if(expireTime <=0) {
-            instance.add(Calendar.SECOND,3600);//默认一小时
+            /**
+             * 默认一小时
+             */
+            instance.add(Calendar.SECOND,3600);
         } else {
             instance.add(Calendar.SECOND,expireTime);
         }

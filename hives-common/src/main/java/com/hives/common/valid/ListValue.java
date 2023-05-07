@@ -5,6 +5,9 @@ import javax.validation.Payload;
 import java.lang.annotation.*;
 
 
+/**
+ * @author Meng
+ */
 @Documented
 @Constraint(
         validatedBy = {ListValueConstraintValidator.class}//用该校验器进行校验

@@ -1,7 +1,5 @@
 package com.hives.gateway.config;
 
-import jdk.nashorn.internal.objects.annotations.Getter;
-import jdk.nashorn.internal.objects.annotations.Setter;
 
 public class AuthenticationBean {
     private String username;

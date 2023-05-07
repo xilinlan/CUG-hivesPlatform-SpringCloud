@@ -1,5 +1,8 @@
 package com.hives.common.constant;
 
+/**
+ * @author Meng
+ */
 public interface ResultStatusCode{
 
     /**

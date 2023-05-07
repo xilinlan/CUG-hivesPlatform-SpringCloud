@@ -1,5 +1,7 @@
 package com.hives.common.exception;
-
+/**
+ * @author Meng
+ */
 public enum BizCodeEnume {
     /**
      * 系统未知异常

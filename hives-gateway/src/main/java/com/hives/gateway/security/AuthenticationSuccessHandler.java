@@ -30,7 +30,10 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 public class AuthenticationSuccessHandler extends WebFilterChainServerAuthenticationSuccessHandler {
-    private int timeout=3600;//默认一小时
+    /**
+     * 默认一小时
+     */
+    private final int timeout=3600;
     private final int rememberMe=180;
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
@@ -53,7 +56,10 @@ public class AuthenticationSuccessHandler extends WebFilterChainServerAuthentica
           try {
             Map<String, String> load = new HashMap<>();
             load.put("username",authentication.getName());
-            load.put("role",list.get(0).getAuthority());//这里只添加了一种角色 实际上用户可以有不同的角色类型
+              /**
+               * 这里只添加了一种角色 实际上用户可以有不同的角色类型
+               */
+            load.put("role",list.get(0).getAuthority());
             String token;
             SecurityUserDetails securityUserDetails= (SecurityUserDetails) authentication.getPrincipal();
             log.info(authentication.toString());

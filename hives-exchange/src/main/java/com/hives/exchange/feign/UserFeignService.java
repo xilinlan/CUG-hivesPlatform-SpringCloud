@@ -17,7 +17,7 @@ import java.util.List;
  * @Date: 2023/04/14/16:07
  * @Description:
  */
-@FeignClient("hives-user")
+@FeignClient("hives-user-gxy")
 public interface UserFeignService {
     @GetMapping("/user/user/userInfo/{id}")
     UserTo userInfo(@PathVariable("id")Long id);

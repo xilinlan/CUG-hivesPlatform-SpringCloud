@@ -18,7 +18,7 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
             //SecurityUserDetails userSecurity = (SecurityUserDetails) auth.getPrincipal();
             String path=authorizationContext.getExchange().getRequest().getURI().getPath();
             for (GrantedAuthority authority : auth.getAuthorities()){
-                if (authority.getAuthority().equals("ROLE_USER")||authority.getAuthority().equals("ROLE_ADMIN")) {
+                if ("ROLE_USER".equals(authority.getAuthority())|| "ROLE_ADMIN".equals(authority.getAuthority())) {
                     return new AuthorizationDecision(true);
                 }
 //对客户端访问路径与用户角色进行匹配

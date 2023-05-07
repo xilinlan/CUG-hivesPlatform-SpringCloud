@@ -60,6 +60,9 @@ public class WebSecurityConfig {
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http.addFilterBefore(cookieToHeadersFilter, SecurityWebFiltersOrder.HTTP_HEADERS_WRITER);
         //SecurityWebFiltersOrder枚举类定义了执行次序
+        /**
+         * 请求拦截处理
+         */
         http.authorizeExchange(exchange -> exchange // 请求拦截处理
                                 .pathMatchers(path).permitAll()
                                 .pathMatchers(HttpMethod.OPTIONS).permitAll()

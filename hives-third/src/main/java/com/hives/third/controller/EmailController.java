@@ -43,7 +43,6 @@ public class EmailController {
             request.setToAddress(email);
             System.out.println(email);
             //可以给多个收件人发送邮件，收件人之间用逗号分开，批量发信建议使用BatchSendMailRequest方式
-            //request.setToAddress("邮箱1,邮箱2");
             request.setSubject("尊敬的用户您好:");
             //随机生成六位验证码
             request.setHtmlBody("【HivesPlatform】您的验证码为：<h3>"+code+"</h3><p>切勿将验证码泄露于他人,本条验证码有效期10分钟</p>");

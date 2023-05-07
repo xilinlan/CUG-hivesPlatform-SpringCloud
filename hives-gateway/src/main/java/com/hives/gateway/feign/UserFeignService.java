@@ -16,8 +16,13 @@ import java.util.List;
  * @Date: 2023/04/14/16:07
  * @Description:
  */
-@FeignClient("hives-user")
+@FeignClient("hives-user-gxy")
 public interface UserFeignService {
+    /**
+     * 通过邮件获取用户信息
+     * @param email
+     * @return
+     */
     @GetMapping("/user/user/getUserByEmail")
     UserTo UserByEmail(@RequestParam("email") String email);
 }

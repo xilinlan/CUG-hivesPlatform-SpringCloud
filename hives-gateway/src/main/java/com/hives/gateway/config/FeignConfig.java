@@ -14,6 +14,9 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Meng
+ */
 @Configuration
 public class FeignConfig {
     @Bean

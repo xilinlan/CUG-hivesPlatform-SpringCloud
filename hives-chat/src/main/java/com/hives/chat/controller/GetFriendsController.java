@@ -23,6 +23,7 @@ public class GetFriendsController {
 
     @GetMapping("/getFollows")
     public R getFriends(@RequestParam("userId") Long userId) {
+        System.out.println(userId);
         return userFeignService.getFriends(userId);
     }
 
