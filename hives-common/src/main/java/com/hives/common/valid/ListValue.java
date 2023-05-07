@@ -5,6 +5,10 @@ import javax.validation.Payload;
 import java.lang.annotation.*;
 
 
+/**
+ * @Author: zhangtao
+ * @Date: 2023/4/6 14:39
+ */
 @Documented
 @Constraint(
         validatedBy = {ListValueConstraintValidator.class}//用该校验器进行校验

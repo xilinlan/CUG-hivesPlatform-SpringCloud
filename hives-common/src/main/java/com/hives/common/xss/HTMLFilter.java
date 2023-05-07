@@ -68,7 +68,9 @@ public final class HTMLFilter {
     private static final Pattern P_RIGHT_ARROW = Pattern.compile(">");
     private static final Pattern P_BOTH_ARROWS = Pattern.compile("<>");
 
-    // @xxx could grow large... maybe use sesat's ReferenceMap
+    /**
+     * set of allowed html elements, along with allowed attributes for each element
+     */
     private static final ConcurrentMap<String,Pattern> P_REMOVE_PAIR_BLANKS = new ConcurrentHashMap<String, Pattern>();
     private static final ConcurrentMap<String,Pattern> P_REMOVE_SELF_BLANKS = new ConcurrentHashMap<String, Pattern>();
 
@@ -129,7 +131,8 @@ public final class HTMLFilter {
         vSelfClosingTags = new String[]{"img"};
         vNeedClosingTags = new String[]{"a", "b", "strong", "i", "em"};
         vDisallowed = new String[]{};
-        vAllowedProtocols = new String[]{"http", "mailto", "https"}; // no ftp.
+        // no ftp.
+        vAllowedProtocols = new String[]{"http", "mailto", "https"};
         vProtocolAtts = new String[]{"src", "href"};
         vRemoveBlanks = new String[]{"a", "b", "strong", "i", "em"};
         vAllowedEntities = new String[]{"amp", "gt", "lt", "quot"};
@@ -188,6 +191,12 @@ public final class HTMLFilter {
 
     //---------------------------------------------------------------
     // my versions of some PHP library functions
+
+    /**
+     * PHP's nl2br function makes <br /> from \n
+     * @param decimal
+     * @return
+     */
     public static String chr(final int decimal) {
         return String.valueOf((char) decimal);
     }
@@ -247,7 +256,8 @@ public final class HTMLFilter {
         final Matcher m = P_COMMENTS.matcher(s);
         final StringBuffer buf = new StringBuffer();
         if (m.find()) {
-            final String match = m.group(1); //(.*?)
+            //(.*?)
+            final String match = m.group(1);
             m.appendReplacement(buf, Matcher.quoteReplacement("<!--" + htmlSpecialChars(match) + "-->"));
         }
         m.appendTail(buf);
@@ -358,22 +368,22 @@ public final class HTMLFilter {
                 final List<String> paramNames = new ArrayList<String>();
                 final List<String> paramValues = new ArrayList<String>();
                 while (m2.find()) {
-                    paramNames.add(m2.group(1)); //([a-z0-9]+)
-                    paramValues.add(m2.group(3)); //(.*?)
+                    //([a-z0-9]+)
+                    paramNames.add(m2.group(1));
+                    //(.*?)
+                    paramValues.add(m2.group(3));
                 }
                 while (m3.find()) {
-                    paramNames.add(m3.group(1)); //([a-z0-9]+)
-                    paramValues.add(m3.group(3)); //([^\"\\s']+)
+                    //([a-z0-9]+)
+                    paramNames.add(m3.group(1));
+                    //([^\"\\s']+)
+                    paramValues.add(m3.group(3));
                 }
 
                 String paramName, paramValue;
                 for (int ii = 0; ii < paramNames.size(); ii++) {
                     paramName = paramNames.get(ii).toLowerCase();
                     paramValue = paramValues.get(ii);
-
-//          debug( "paramName='" + paramName + "'" );
-//          debug( "paramValue='" + paramValue + "'" );
-//          debug( "allowed? " + vAllowed.get( name ).contains( paramName ) );
 
                     if (allowedAttribute(name, paramName)) {
                         if (inArray(paramName, vProtocolAtts)) {
@@ -474,8 +484,10 @@ public final class HTMLFilter {
         // validate entities throughout the string
         Matcher m = P_VALID_ENTITIES.matcher(s);
         while (m.find()) {
-            final String one = m.group(1); //([^&;]*)
-            final String two = m.group(2); //(?=(;|&|$))
+            //([^&;]*)
+            final String one = m.group(1);
+            //(?=(;|&|$))
+            final String two = m.group(2);
             m.appendReplacement(buf, Matcher.quoteReplacement(checkEntity(one, two)));
         }
         m.appendTail(buf);
@@ -488,9 +500,12 @@ public final class HTMLFilter {
             StringBuffer buf = new StringBuffer();
             Matcher m = P_VALID_QUOTES.matcher(s);
             while (m.find()) {
-                final String one = m.group(1); //(>|^)
-                final String two = m.group(2); //([^<]+?)
-                final String three = m.group(3); //(<|$)
+                //(>|^)
+                final String one = m.group(1);
+                //([^<]+?)
+                final String two = m.group(2);
+                //(<|$)
+                final String three = m.group(3);
                 m.appendReplacement(buf, Matcher.quoteReplacement(one + regexReplace(P_QUOTE, "&quot;", two) + three));
             }
             m.appendTail(buf);

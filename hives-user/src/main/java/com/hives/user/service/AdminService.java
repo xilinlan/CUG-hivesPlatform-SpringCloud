@@ -15,6 +15,11 @@ import java.util.Map;
  */
 public interface AdminService extends IService<AdminEntity> {
 
+    /**
+     * 管理员名单分页查询
+     * @param params
+     * @return PageUtils
+     */
     PageUtils queryPage(Map<String, Object> params);
 }
 

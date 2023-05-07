@@ -4,6 +4,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
+/**
+ * @Author: xilinlan
+ * @Date: 2023/4/3 20:39
+ */
 @Component
 @PropertySource("classpath:mail.properties")
 @ConfigurationProperties(prefix = "mail")

@@ -21,12 +21,18 @@ import org.springframework.util.DigestUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
-
+/**
+ * @Author: zhangtao and xilinlan
+ * @date 2023-03-30 14:10:36
+ */
 @Service("userService")
 public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements UserService {
 
+    /**
+     * 注入邮件配置类
+     */
     @Autowired
-    private MailConfig mailConfig;//注入邮件配置类
+    private MailConfig mailConfig;
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         IPage<UserEntity> page = this.page(

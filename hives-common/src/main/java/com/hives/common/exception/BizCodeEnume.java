@@ -1,5 +1,9 @@
 package com.hives.common.exception;
 
+/**
+ * @Author: zhangtao
+ * @Date: 2023/4/6 14:39
+ */
 public enum BizCodeEnume {
     /**
      * 系统未知异常

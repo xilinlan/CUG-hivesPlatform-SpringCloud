@@ -1,17 +1,11 @@
 package com.hives.chat.component;
 
-import cn.hutool.json.JSONArray;
-import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.nacos.shaded.com.google.gson.Gson;
-import com.hives.chat.Utils.RedisUtil;
 import com.hives.chat.common.CustomSpringConfigurator;
 import com.hives.chat.entity.MessageEntity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -31,9 +25,27 @@ import java.util.stream.LongStream;
  * @Description:
  */
 
-
+/**
+ * @Author: xilinlan
+ * @Description: WebSocket 服务端
+ * <p>
+ *     1. 通过 @ServerEndpoint 注解声明一个 WebSocket 服务端
+ *     2. 通过 @OnOpen 注解声明一个连接建立时的回调
+ *     3. 通过 @OnMessage 注解声明一个客户端消息到来时的回调
+ *     4. 通过 @OnClose 注解声明一个连接关闭时的回调
+ *     5. 通过 @OnError 注解声明一个处理错误时的回调
+ *     6. 通过 @PathParam 注解可以获取客户端连接上的路径参数
+ *     7. 通过 session 可以主动推送消息给客户端
+ *     8. 通过 @ServerEndpoint.Configurator 注解声明一个配置器，用于注入 spring 容器中的 bean
+ *     9. 通过 @ServerEndpoint.Decoders 注解声明一个解码器，用于解码客户端发送过来的消息
+ *     10. 通过 @ServerEndpoint.Encoders 注解声明一个编码器，用于编码服务端发送给客户端的消息
+ *     11. 通过 @ServerEndpoint.Value 注解声明一个客户端连接的 url
+ *     12. 通过 @Component 注解声明一个 spring bean
+ *     13. 通过 @Autowired 注解注入 spring 容器中的 bean
+ *     14. 通过 @Resource 注解注入 spring 容器中的 bean
+ * </p>
+ */
 @Component
-// 配置 websocket 的路径
 @ServerEndpoint(
         value = "/websocket/{id}",
         decoders = { MessageEntityDecode.class },
@@ -45,7 +57,9 @@ public class WebSocketServer {
     private Session session;
     private final Gson gson;
     private RedisTemplate redis;
-    // 存储所有的用户连接
+    /**
+     * 存储每个用户的 session
+     */
     private static final Map<Long, Session> WEBSOCKET_MAP = new ConcurrentHashMap<>();
 
     @Autowired
@@ -72,7 +86,7 @@ public class WebSocketServer {
 
         // 将信息存储到 redis 中
         redis.opsForList().rightPush(key, JSONUtil.toJsonStr(message));
-
+        System.out.println("message"+message);
         // 如果用户在线就将信息发送给指定用户
         if (WEBSOCKET_MAP.get(message.getToId()) != null) {
             WEBSOCKET_MAP.get(message.getToId()).getBasicRemote().sendText(gson.toJson(message));

@@ -122,8 +122,8 @@ public class UserController {
     @GetMapping("/validate")
     public R validate(@RequestParam String code,@RequestParam String email){
         // 接收到请求，从redis中取出code，比对收到的验证码是否符合刚才生成的验证码并返回结果
-        String redis_code = stringRedisTemplate.opsForValue().get(email);
-        if(code.equals(redis_code)){
+        String redisCode = stringRedisTemplate.opsForValue().get(email);
+        if(code.equals(redisCode)){
             return R.ok().put("correct",UserConstant.ValidateEnum.SUCCESS.getCode()).put("msg",UserConstant.ValidateEnum.SUCCESS.getMsg());
         }else {
             return R.ok().put("correct",UserConstant.ValidateEnum.FAIL.getCode()).put("msg",UserConstant.ValidateEnum.FAIL.getMsg());
@@ -135,7 +135,6 @@ public class UserController {
      * 列表
      */
     @RequestMapping("/list")
-    //@RequiresPermissions("user:user:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = userService.queryPage(params);
 
@@ -147,7 +146,6 @@ public class UserController {
      * 信息
      */
     @GetMapping("/info/{id}")
-    //@RequiresPermissions("user:user:info")
     public R info(@PathVariable("id") Long id){
 		UserEntity user = userService.getById(id);
 
@@ -187,7 +185,6 @@ public class UserController {
      * 保存
      */
     @RequestMapping("/save")
-    //@RequiresPermissions("user:user:save")
     public R save(@RequestBody UserEntity user){
 		userService.save(user);
         return R.ok();
@@ -197,7 +194,6 @@ public class UserController {
      * 修改
      */
     @RequestMapping("/updatePersonal")
-    //@RequiresPermissions("user:user:update")
     public R update(@RequestBody UserEntity user){
 		userService.updateById(user);
         return R.ok().put("udppStatus",UserConstant.UdpPEnum.SUCCESS.getCode()).put("msg",UserConstant.UdpPEnum.SUCCESS.getMsg());
@@ -207,7 +203,6 @@ public class UserController {
      * 删除
      */
     @RequestMapping("/delete")
-    //@RequiresPermissions("user:user:delete")
     public R delete(@RequestBody Long[] ids){
 		userService.removeByIds(Arrays.asList(ids));
 
@@ -215,7 +210,7 @@ public class UserController {
     }
 
     @GetMapping("/getUserByEmail")
-    public UserTo UserByEmail(@PathParam("email") String email){
+    public UserTo userByEmail(@PathParam("email") String email){
         UserTo user=userService.getUserByEmail(email);
         return user;
     }
@@ -225,7 +220,7 @@ public class UserController {
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie:cookies){
             System.out.println(cookie.getValue());
-            if(cookie.getName().equals("token")){
+            if("token".equals(cookie.getName())){
                 String user = stringRedisTemplate.opsForValue().get(cookie.getValue());
                 System.out.println(user);
                 UserTo userTo = JSON.parseObject(user, UserTo.class);

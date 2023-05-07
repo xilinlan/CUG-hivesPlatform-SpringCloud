@@ -50,7 +50,6 @@ public class FollowController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    //@RequiresPermissions("user:follow:info")
     public R info(@PathVariable("id") Long id){
 		FollowEntity follow = followService.getById(id);
 
@@ -58,7 +57,6 @@ public class FollowController {
     }
 
     @GetMapping("/getOtherUserInfo")
-    //@RequiresPermissions("user:follow:info")
     public R getOtherUserInfo(@RequestParam("userId") Long userId, @RequestParam("targetId") Long targetId){
         OtherUserVo otherUserInfo = followService.getOtherUserInfo(userId, targetId);
         return R.ok().put("otherUserInfo", otherUserInfo);
@@ -77,7 +75,6 @@ public class FollowController {
      * 修改
      */
     @RequestMapping("/update")
-    //@RequiresPermissions("user:follow:update")
     public R update(@RequestBody FollowEntity follow){
 		followService.updateById(follow);
 
@@ -88,7 +85,6 @@ public class FollowController {
      * 删除
      */
     @PostMapping("/delete")
-    //@RequiresPermissions("user:follow:delete")
     public R delete(@RequestBody FollowEntity follow){
 		followService.deleteFollow(follow);
 
