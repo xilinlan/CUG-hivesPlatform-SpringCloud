@@ -40,8 +40,8 @@ public class PostLikesServiceImpl extends ServiceImpl<PostLikesDao, PostLikesEnt
     }
 
     @Override
-    public PostLikesEntity isLike(Long userId, Long id) {
-        PostLikesEntity postLike = this.getOne(new QueryWrapper<PostLikesEntity>().eq("user_id", userId).eq("post_id", id).eq("is_deleted", 0));
+    public PostLikesEntity isLike(Long userId, Long postId) {
+        PostLikesEntity postLike = this.getOne(new QueryWrapper<PostLikesEntity>().eq("user_id", userId).eq("post_id", postId).eq("is_deleted", 0));
         return postLike;
     }
 

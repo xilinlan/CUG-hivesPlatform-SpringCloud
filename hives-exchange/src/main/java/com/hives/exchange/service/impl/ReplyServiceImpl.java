@@ -123,10 +123,6 @@ public class ReplyServiceImpl extends ServiceImpl<ReplyDao, ReplyEntity> impleme
         this.updateBatchById(replyEntityList);
     }
 
-    @Override
-    public void logicRemoveByIds(List<Long> asList) {
-
-    }
 
     /**
      * 根据传入的item来对应逻辑删除该item以及与该item在其他表有关系的一些数据
