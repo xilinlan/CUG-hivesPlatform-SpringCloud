@@ -26,8 +26,6 @@ public interface ReplyService extends IService<ReplyEntity> {
 
     void removeReplyByPostIds(List<Long> asList);
 
-    void logicRemoveByIds(List<Long> asList);
-
     void logicRemoveReply(ReplyEntity item);
 }
 
