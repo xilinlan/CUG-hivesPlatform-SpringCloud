@@ -3,6 +3,7 @@ package com.hives.exchange.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hives.common.constant.PostConstant;
+import com.hives.common.exception.RRException;
 import com.hives.common.to.FollowTo;
 import com.hives.common.to.UserTo;
 import com.hives.common.utils.PageUtils;
@@ -78,9 +79,11 @@ public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements
     @CacheRemove(value = "postCache", key="queryPostPage_")
     @Transactional(rollbackFor = Exception.class)
     public void savePost(Long userId,PostDto post) {
+        if(post.getUserId()==null||post.getContent()==null||post.getUrls()==null){
+            throw new RRException("参数格式不完整");
+        }
         PostEntity postEntity=new PostEntity();
         BeanUtils.copyProperties(post,postEntity);
-        //SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         postEntity.setCreateTime(new Date());
         postEntity.setUpdateTime(new Date());

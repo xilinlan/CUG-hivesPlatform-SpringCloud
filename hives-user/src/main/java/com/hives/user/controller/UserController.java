@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.alibaba.fastjson.JSON;
 import com.hives.common.constant.UserConstant;
+import com.hives.common.exception.RRException;
 import com.hives.common.to.UserTo;
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.R;
@@ -195,7 +196,11 @@ public class UserController {
      */
     @RequestMapping("/updatePersonal")
     public R update(@RequestBody UserEntity user){
-		userService.updateById(user);
+        UserEntity user1 = userService.getById(user.getId());
+        if (user1==null){
+            throw new RRException("该用户不存在");
+        }
+        userService.updateById(user);
         return R.ok().put("udppStatus",UserConstant.UdpPEnum.SUCCESS.getCode()).put("msg",UserConstant.UdpPEnum.SUCCESS.getMsg());
     }
 
@@ -203,6 +208,7 @@ public class UserController {
      * 删除
      */
     @RequestMapping("/delete")
+    //@RequiresPermissions("user:user:delete")
     public R delete(@RequestBody Long[] ids){
 		userService.removeByIds(Arrays.asList(ids));
 

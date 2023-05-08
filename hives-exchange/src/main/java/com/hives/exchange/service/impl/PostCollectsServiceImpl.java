@@ -1,6 +1,7 @@
 package com.hives.exchange.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.hives.common.exception.RRException;
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.Query;
 import com.hives.exchange.config.CacheRemove;
@@ -57,6 +58,9 @@ public class PostCollectsServiceImpl extends ServiceImpl<PostCollectsDao, PostCo
     @Override
     @CacheRemove(value = "postCollects", key={"getUserCollects_","queryPostPage_"})
     public void updateCollects(Long userId, Long postId) {
+        if(userId==null||postId==null){
+            throw new RRException("参数不完整");
+        }
         PostEntity post = postService.getById(postId);
         Long collects = post.getCollects();
         PostCollectsEntity collectsEntity = this.getOne(new QueryWrapper<PostCollectsEntity>().eq("user_id", userId).eq("post_id", postId));

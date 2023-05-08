@@ -18,7 +18,7 @@ public class HivesCorsConfiguration {
         // 允许所有请求方法
         corsConfig.addAllowedMethod ("*");
         // 允许所有域，当请求头
-        corsConfig.addAllowedOrigin ("*");
+        corsConfig.addAllowedOriginPattern ("*");
         // 允许全部请求头
         corsConfig.addAllowedHeader ("*");
         // 允许携带 Authorization 头
