@@ -96,12 +96,8 @@ public class UserController {
         // 接收到请求，检查邮箱是否合法以及数据库中已经存在邮箱，生成验证码，当验证码生成并发送到邮件后，返回ok
         // 检查邮箱是否合法
         Boolean checkEmailFormat = userService.checkEmailFormat(email);
-        Boolean checkEmail = userService.checkEmail(email);
         if(!checkEmailFormat){
             return R.ok().put("sendStatus", UserConstant.EmailEnum.ILLEGAL.getCode()).put("msg",UserConstant.EmailEnum.ILLEGAL.getMsg());
-        }
-        if(checkEmail){
-            return R.ok().put("sendStatus", UserConstant.EmailEnum.EXISTS.getCode()).put("msg",UserConstant.EmailEnum.EXISTS.getMsg());
         }
         else{
             // 生成验证码 6位
@@ -158,7 +154,6 @@ public class UserController {
         UserTo userTo=new UserTo();
         UserEntity user=userService.getById(id);
         BeanUtils.copyProperties(user,userTo);
-        System.out.println(userTo);
         return userTo;
     }
 
@@ -208,7 +203,6 @@ public class UserController {
      * 删除
      */
     @RequestMapping("/delete")
-    //@RequiresPermissions("user:user:delete")
     public R delete(@RequestBody Long[] ids){
 		userService.removeByIds(Arrays.asList(ids));
 

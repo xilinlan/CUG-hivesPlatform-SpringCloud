@@ -4,12 +4,11 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
-import java.util.Date;
 import lombok.Data;
 
 /**
  * 管理员
- * 
+ *
  * @author zhangtao
  * @email 2298805496@qq.com
  * @date 2023-03-30 14:10:36

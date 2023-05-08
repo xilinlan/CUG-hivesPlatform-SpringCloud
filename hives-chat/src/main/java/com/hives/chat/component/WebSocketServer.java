@@ -64,6 +64,7 @@ public class WebSocketServer {
 
     @Autowired
     public WebSocketServer(Gson gson,RedisTemplate redis) {
+        // 注入 gson
         this.gson = gson;
         this.redis = redis;
     }
