@@ -75,8 +75,14 @@ public class UserController {
     @PostMapping("/register")
     public R register(@RequestBody UserEntity user) {
         // 接收注册信息，将其存储到数据库表中
-        userService.register(user);
-        return R.ok().put("regStatus",UserConstant.RegisterEnum.SUCCESS).put("msg",UserConstant.RegisterEnum.SUCCESS.getMsg());
+        // 检查邮箱是否存在
+        Boolean checkEmail = userService.checkEmail(user.getEmail());
+        if(checkEmail){
+            return R.ok().put("regStatus",UserConstant.RegisterEnum.EXISTS.getCode()).put("msg",UserConstant.RegisterEnum.EXISTS.getMsg());
+        }else{
+            userService.register(user);
+            return R.ok().put("regStatus",UserConstant.RegisterEnum.SUCCESS.getCode()).put("msg",UserConstant.RegisterEnum.SUCCESS.getMsg());
+        }
     }
 
     /**
@@ -88,13 +94,24 @@ public class UserController {
     @GetMapping("/sendCode")
     public R sendCode(@RequestParam String email){
         // 接收到请求，检查邮箱是否合法以及数据库中已经存在邮箱，生成验证码，当验证码生成并发送到邮件后，返回ok
-        // 生成验证码 6位
-        String verifyCode = String.valueOf((Math.random()*9+1)*100000).substring(0,6);
-        // 将验证码存入redis
-        stringRedisTemplate.opsForValue().set(email,verifyCode,60 * 10, TimeUnit.SECONDS);
-        // 调用第三方服务包将验证码发送到邮箱
-        emailFeignService.sendCode(verifyCode,email);
-        return R.ok().put("sendStatus", UserConstant.EmailEnum.SUCCESS.getCode()).put("msg",UserConstant.EmailEnum.SUCCESS.getMsg());
+        // 检查邮箱是否合法
+        Boolean checkEmailFormat = userService.checkEmailFormat(email);
+        Boolean checkEmail = userService.checkEmail(email);
+        if(!checkEmailFormat){
+            return R.ok().put("sendStatus", UserConstant.EmailEnum.ILLEGAL.getCode()).put("msg",UserConstant.EmailEnum.ILLEGAL.getMsg());
+        }
+        if(checkEmail){
+            return R.ok().put("sendStatus", UserConstant.EmailEnum.EXISTS.getCode()).put("msg",UserConstant.EmailEnum.EXISTS.getMsg());
+        }
+        else{
+            // 生成验证码 6位
+            String verifyCode = String.valueOf((Math.random()*9+1)*100000).substring(0,6);
+            // 将验证码存入redis
+            stringRedisTemplate.opsForValue().set(email,verifyCode,60 * 10, TimeUnit.SECONDS);
+            // 调用第三方服务包将验证码发送到邮箱
+            emailFeignService.sendCode(verifyCode,email);
+            return R.ok().put("sendStatus", UserConstant.EmailEnum.SUCCESS.getCode()).put("msg",UserConstant.EmailEnum.SUCCESS.getMsg());
+        }
     }
 
     /**

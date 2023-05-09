@@ -1,13 +1,10 @@
 package com.hives.chat.feign;
 
 import com.hives.common.utils.R;
-import com.hives.user.entity.FollowEntity;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
