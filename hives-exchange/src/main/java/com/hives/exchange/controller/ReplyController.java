@@ -9,6 +9,7 @@ import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.R;
 import com.hives.exchange.vo.Reply1Vo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import com.hives.exchange.entity.ReplyEntity;
@@ -80,6 +81,7 @@ public class ReplyController {
      * 删除
      */
     @RequestMapping("/delete")
+    @Transactional
     public R delete(@RequestBody Long[] ids){
         List<ReplyEntity> replyEntityList = replyService.listByIds(Arrays.asList(ids));
         for (ReplyEntity item:

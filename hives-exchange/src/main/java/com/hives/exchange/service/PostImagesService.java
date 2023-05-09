@@ -18,7 +18,7 @@ public interface PostImagesService extends IService<PostImagesEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
 
-    List<String> getImages(Long id);
+    List<String> getImages(Long postId);
 
     void removeImagesByPostId(Long postId);
 }

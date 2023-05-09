@@ -31,16 +31,6 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-    @Value("${person.name}")
-    private String name;
-
-    @Value("${person.age}")
-    private Integer age;
-
-    @RequestMapping("/test")
-    public R test(){
-        return R.ok().put("name",name).put("age",age);
-    }
 
     /**
      * 获取首页贴子，按PageUtils分页返回
@@ -82,8 +72,6 @@ public class PostController {
      */
     @PostMapping("/save")
     public R save(@RequestBody PostDto post){
-//        System.out.println(post);
-//        return R.ok();
         postService.savePost(post.getUserId(), post);
         return R.ok().put("postStatus", PostConstant.PostEnum.SUCCESS.getCode()).put("msg",PostConstant.PostEnum.SUCCESS.getMsg());
     }

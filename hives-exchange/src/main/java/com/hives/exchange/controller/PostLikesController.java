@@ -65,9 +65,7 @@ public class PostLikesController {
      * 修改
      */
     @PostMapping("/update")
-    //@RequiresPermissions("exchange:postlikes:update")
     public R update(@RequestBody PostLikesEntity postLikes){
-		// postLikesService.updateById(postLikes);
         postLikesService.updatePostLikes(postLikes.getUserId(),postLikes.getPostId());
         return R.ok();
     }
@@ -76,7 +74,6 @@ public class PostLikesController {
      * 删除
      */
     @RequestMapping("/delete")
-    //@RequiresPermissions("exchange:postlikes:delete")
     public R delete(@RequestBody Long[] ids){
 		postLikesService.removeByIds(Arrays.asList(ids));
         return R.ok();

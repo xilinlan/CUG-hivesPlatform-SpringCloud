@@ -113,7 +113,7 @@ public class FollowServiceImpl extends ServiceImpl<FollowDao, FollowEntity> impl
             followEntity.setIsDeleted(0);
             this.updateById(followEntity);
         }else{
-            throw new RRException("系统繁忙，请稍后再试",11000);
+            throw new RRException("已经关注该用户");
         }
         UserEntity user = userService.getById(follow.getUserId());
         UserEntity targetUser=userService.getById(follow.getTargetId());
@@ -129,6 +129,9 @@ public class FollowServiceImpl extends ServiceImpl<FollowDao, FollowEntity> impl
         FollowEntity followEntity = this.getOne(new QueryWrapper<FollowEntity>().eq("user_id", follow.getUserId()).eq("target_id", follow.getTargetId()));
 
         if (followEntity != null) {
+            if(followEntity.getIsDeleted()==1){
+                throw new RRException("你已取消关注用户");
+            }
             followEntity.setIsDeleted(1);
             this.updateById(followEntity);
         }

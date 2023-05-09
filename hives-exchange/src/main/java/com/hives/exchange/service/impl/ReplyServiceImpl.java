@@ -1,5 +1,6 @@
 package com.hives.exchange.service.impl;
 
+import com.hives.common.exception.RRException;
 import com.hives.common.to.UserTo;
 import com.hives.common.utils.PageUtils;
 import com.hives.common.utils.Query;
@@ -31,6 +32,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hives.exchange.dao.ReplyDao;
 import com.hives.exchange.entity.ReplyEntity;
 import com.hives.exchange.service.ReplyService;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service("replyService")
@@ -64,6 +66,10 @@ public class ReplyServiceImpl extends ServiceImpl<ReplyDao, ReplyEntity> impleme
             @CacheEvict(value = "replyCache",key="'getFirstLevelComments'+#reply.getPostId()")
     })
     public ReplyEntity saveReply(ReplyEntity reply) {
+        if(reply.getPostId()==null||reply.getTargetId()==null||reply.getUserId()==null||reply.getContent()==null)
+        {
+            throw new RRException("参数不完整");
+        }
         reply.setCreateTime(new Date());
         postService.updatePostUpdateTime(reply.getPostId());
         this.save(reply);
@@ -123,16 +129,13 @@ public class ReplyServiceImpl extends ServiceImpl<ReplyDao, ReplyEntity> impleme
         this.updateBatchById(replyEntityList);
     }
 
-    @Override
-    public void logicRemoveByIds(List<Long> asList) {
-
-    }
 
     /**
      * 根据传入的item来对应逻辑删除该item以及与该item在其他表有关系的一些数据
      * @param item
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     @CacheEvict(value="replyCache",key = "'getFirstLevelComments'+ #item.postId")
     public void logicRemoveReply(ReplyEntity item) {
         item.setIsDeleted(1);
@@ -143,18 +146,20 @@ public class ReplyServiceImpl extends ServiceImpl<ReplyDao, ReplyEntity> impleme
     }
 
     private void logicRemoveReplyByReplyId(Long replyId) {
-        List<ReplyEntity> replyEntities = this.list(new QueryWrapper<ReplyEntity>().eq("reply_id", replyId));
+        List<ReplyEntity> replyEntities = this.list(new QueryWrapper<ReplyEntity>().eq("reply_id", replyId).eq("is_deleted",0));
         List<ReplyEntity> collect = replyEntities.stream().map(item -> {
             item.setIsDeleted(1);
+            postService.removeReply(item.getPostId());
             return item;
         }).collect(Collectors.toList());
         this.updateBatchById(collect);
     }
 
     private void logicRemoveReplyByReply1Id(Long replyId) {
-        List<ReplyEntity> replyEntities = this.list(new QueryWrapper<ReplyEntity>().eq("reply1_id", replyId));
+        List<ReplyEntity> replyEntities = this.list(new QueryWrapper<ReplyEntity>().eq("reply1_id", replyId).eq("is_deleted",0));
         List<ReplyEntity> collect = replyEntities.stream().map(item -> {
             item.setIsDeleted(1);
+            postService.removeReply(item.getPostId());
             return item;
         }).collect(Collectors.toList());
         this.updateBatchById(collect);

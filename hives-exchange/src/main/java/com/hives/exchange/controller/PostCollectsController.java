@@ -61,7 +61,6 @@ public class PostCollectsController {
      */
     @PostMapping("/update")
     public R update(@RequestBody PostCollectsEntity postCollects){
-		// postCollectsService.updateById(postCollects);
         postCollectsService.updateCollects(postCollects.getUserId(),postCollects.getPostId());
         return R.ok();
     }

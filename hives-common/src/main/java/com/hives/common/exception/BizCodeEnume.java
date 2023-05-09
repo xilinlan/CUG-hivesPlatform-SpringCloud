@@ -4,7 +4,7 @@ public enum BizCodeEnume {
     /**
      * 系统未知异常
      */
-    UNKOWN_EXCEPTION(10000,"系统未知异常"),
+    UNKOWN_EXCEPTION(10000,"系统繁忙，请稍后再试！"),
     /**
      * 参数格式校验失败
      */

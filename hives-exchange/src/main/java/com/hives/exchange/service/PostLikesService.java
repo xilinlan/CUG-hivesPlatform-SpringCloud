@@ -17,7 +17,7 @@ public interface PostLikesService extends IService<PostLikesEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
 
-    PostLikesEntity isLike(Long userId, Long id);
+    PostLikesEntity isLike(Long userId, Long postId);
 
     void updatePostLikes(Long userId,Long postId);
 
