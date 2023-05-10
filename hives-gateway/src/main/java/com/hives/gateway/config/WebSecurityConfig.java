@@ -54,7 +54,8 @@ public class WebSecurityConfig {
             "/test/login",
             "/api/user/user/register",
             "/api/user/user/sendCode",
-            "/api/user/user/validate"
+            "/api/user/user/validate",
+            "/api/user/user/updatePassword"
     };
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
