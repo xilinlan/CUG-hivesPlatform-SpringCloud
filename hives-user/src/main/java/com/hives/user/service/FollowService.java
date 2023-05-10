@@ -41,10 +41,25 @@ public interface FollowService extends IService<FollowEntity> {
      */
     OtherUserVo getOtherUserInfo(Long userId, Long targetId);
 
+    /**
+     * 保存关注信息
+     * @param follow
+     * @return 关注对象信息以及关注状态
+     */
     void saveFollow(FollowEntity follow);
 
+    /**
+     * 删除关注信息
+     * @param follow
+     * @return 关注对象信息以及关注状态
+     */
     void deleteFollow(FollowEntity follow);
 
+    /**
+     * 获取关注列表
+     * @param userId
+     * @return 关注对象信息以及关注状态
+     */
     List<FollowTo> getFollowTo(Long userId);
 }
 

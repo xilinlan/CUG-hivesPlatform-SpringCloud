@@ -35,7 +35,6 @@ public class AdminController {
      * 列表
      */
     @RequestMapping("/list")
-    //@RequiresPermissions("user:admin:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = adminService.queryPage(params);
 
@@ -47,7 +46,6 @@ public class AdminController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    //@RequiresPermissions("user:admin:info")
     public R info(@PathVariable("id") Long id){
 		AdminEntity admin = adminService.getById(id);
 
@@ -58,7 +56,6 @@ public class AdminController {
      * 保存
      */
     @RequestMapping("/save")
-    //@RequiresPermissions("user:admin:save")
     public R save(@RequestBody AdminEntity admin){
 		adminService.save(admin);
 
@@ -69,7 +66,6 @@ public class AdminController {
      * 修改
      */
     @RequestMapping("/update")
-    //@RequiresPermissions("user:admin:update")
     public R update(@RequestBody AdminEntity admin){
 		adminService.updateById(admin);
 
@@ -80,7 +76,6 @@ public class AdminController {
      * 删除
      */
     @RequestMapping("/delete")
-    //@RequiresPermissions("user:admin:delete")
     public R delete(@RequestBody Long[] ids){
 		adminService.removeByIds(Arrays.asList(ids));
 

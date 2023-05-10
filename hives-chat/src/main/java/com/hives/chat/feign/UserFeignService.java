@@ -16,6 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient("hives-user")
 public interface UserFeignService {
+    /**
+     * 获取用户信息
+     * @param uid
+     * @return
+     */
     @GetMapping("/user/follow/getFollows")
     R getFriends(@RequestParam("userId") Long uid);
 }

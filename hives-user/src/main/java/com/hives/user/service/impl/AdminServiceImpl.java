@@ -13,7 +13,10 @@ import com.hives.user.dao.AdminDao;
 import com.hives.user.entity.AdminEntity;
 import com.hives.user.service.AdminService;
 
-
+/**
+ * @Author: zhangtao
+ * @date 2023-03-30 14:10:36
+ */
 @Service("adminService")
 public class AdminServiceImpl extends ServiceImpl<AdminDao, AdminEntity> implements AdminService {
 

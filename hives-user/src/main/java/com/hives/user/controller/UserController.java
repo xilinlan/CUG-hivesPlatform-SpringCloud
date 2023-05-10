@@ -96,12 +96,8 @@ public class UserController {
         // 接收到请求，检查邮箱是否合法以及数据库中已经存在邮箱，生成验证码，当验证码生成并发送到邮件后，返回ok
         // 检查邮箱是否合法
         Boolean checkEmailFormat = userService.checkEmailFormat(email);
-        Boolean checkEmail = userService.checkEmail(email);
-        if(!checkEmailFormat){
+        if(Boolean.FALSE.equals(checkEmailFormat)){
             return R.ok().put("sendStatus", UserConstant.EmailEnum.ILLEGAL.getCode()).put("msg",UserConstant.EmailEnum.ILLEGAL.getMsg());
-        }
-        if(checkEmail){
-            return R.ok().put("sendStatus", UserConstant.EmailEnum.EXISTS.getCode()).put("msg",UserConstant.EmailEnum.EXISTS.getMsg());
         }
         else{
             // 生成验证码 6位
@@ -123,8 +119,8 @@ public class UserController {
     @GetMapping("/validate")
     public R validate(@RequestParam String code,@RequestParam String email){
         // 接收到请求，从redis中取出code，比对收到的验证码是否符合刚才生成的验证码并返回结果
-        String redis_code = stringRedisTemplate.opsForValue().get(email);
-        if(code.equals(redis_code)){
+        String redisCode = stringRedisTemplate.opsForValue().get(email);
+        if(code.equals(redisCode)){
             return R.ok().put("correct",UserConstant.ValidateEnum.SUCCESS.getCode()).put("msg",UserConstant.ValidateEnum.SUCCESS.getMsg());
         }else {
             return R.ok().put("correct",UserConstant.ValidateEnum.FAIL.getCode()).put("msg",UserConstant.ValidateEnum.FAIL.getMsg());
@@ -136,7 +132,6 @@ public class UserController {
      * 列表
      */
     @RequestMapping("/list")
-    //@RequiresPermissions("user:user:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = userService.queryPage(params);
 
@@ -148,7 +143,6 @@ public class UserController {
      * 信息
      */
     @GetMapping("/info/{id}")
-    //@RequiresPermissions("user:user:info")
     public R info(@PathVariable("id") Long id){
 		UserEntity user = userService.getById(id);
 
@@ -160,7 +154,6 @@ public class UserController {
         UserTo userTo=new UserTo();
         UserEntity user=userService.getById(id);
         BeanUtils.copyProperties(user,userTo);
-        System.out.println(userTo);
         return userTo;
     }
 
@@ -188,7 +181,6 @@ public class UserController {
      * 保存
      */
     @RequestMapping("/save")
-    //@RequiresPermissions("user:user:save")
     public R save(@RequestBody UserEntity user){
 		userService.save(user);
         return R.ok();
@@ -211,7 +203,6 @@ public class UserController {
      * 删除
      */
     @RequestMapping("/delete")
-    //@RequiresPermissions("user:user:delete")
     public R delete(@RequestBody Long[] ids){
 		userService.removeByIds(Arrays.asList(ids));
 
@@ -219,7 +210,7 @@ public class UserController {
     }
 
     @GetMapping("/getUserByEmail")
-    public UserTo UserByEmail(@PathParam("email") String email){
+    public UserTo userByEmail(@PathParam("email") String email){
         UserTo user=userService.getUserByEmail(email);
         return user;
     }
@@ -229,7 +220,7 @@ public class UserController {
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie:cookies){
             System.out.println(cookie.getValue());
-            if(cookie.getName().equals("token")){
+            if("token".equals(cookie.getName())){
                 String user = stringRedisTemplate.opsForValue().get(cookie.getValue());
                 System.out.println(user);
                 UserTo userTo = JSON.parseObject(user, UserTo.class);

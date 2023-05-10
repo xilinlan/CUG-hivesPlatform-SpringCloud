@@ -24,10 +24,10 @@ import java.util.Set;
  * @author Mark sunlightcs@gmail.com
  */
 public class ValidatorUtils {
-    private static final Validator validator;
+    private static final Validator VALIDATOR;
 
     static {
-        validator = Validation.buildDefaultValidatorFactory().getValidator();
+        VALIDATOR = Validation.buildDefaultValidatorFactory().getValidator();
     }
 
     /**
@@ -38,7 +38,7 @@ public class ValidatorUtils {
      */
     public static void validateEntity(Object object, Class<?>... groups)
             throws RRException {
-        Set<ConstraintViolation<Object>> constraintViolations = validator.validate(object, groups);
+        Set<ConstraintViolation<Object>> constraintViolations = VALIDATOR.validate(object, groups);
         if (!constraintViolations.isEmpty()) {
             StringBuilder msg = new StringBuilder();
             for (ConstraintViolation<Object> constraint : constraintViolations) {

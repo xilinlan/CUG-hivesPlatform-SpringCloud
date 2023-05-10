@@ -50,14 +50,7 @@ public class PullMessageController {
     }
 
     @GetMapping("/getMsg")
-    public R GetMessage(){
-//        MessageEntity messageEntity=new MessageEntity();
-//        messageEntity.setFromId(3L);
-//        messageEntity.setToId(4L);
-//        messageEntity.setContent("hello");
-//        messageEntity.setType("1");
-//        messageEntity.setTime(new Date());
-
+    public R getMessage(){
         Criteria criteria1=new Criteria();
         criteria1.and("fromId").is(3).and("toId").is(4);
         Criteria criteria2=new Criteria();
@@ -67,11 +60,7 @@ public class PullMessageController {
         Query query=new Query();
         query.addCriteria(criteria);
         List<MessageEntity> messageEntities = mongoTemplate.find(query, MessageEntity.class);
-
         List<MessageEntity> collect = messageEntities.stream().sorted(Comparator.comparing(MessageEntity::getTime)).collect(Collectors.toList());
-
-
-        //List<MessageEntity> all = mongoTemplate.findAll(MessageEntity.class);
 
         return R.ok().put("data",collect);
     }

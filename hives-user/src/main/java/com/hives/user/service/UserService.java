@@ -16,19 +16,53 @@ import java.util.Map;
  */
 public interface UserService extends IService<UserEntity> {
 
+    /**
+     * 分页查询
+     * @param params
+     * @return PageUtils
+     */
     PageUtils queryPage(Map<String, Object> params);
 
+    /**
+     * 登录
+     * @param user
+     * @return UserEntity
+     */
     UserEntity login(UserEntity user);
 
+    /**
+     * 注册
+     * @param user
+     * @return UserEntity
+     */
     UserEntity register(UserEntity user);
 
+    /**
+     * 修改密码
+     * @param user
+     * @return Integer
+     */
     Integer updatePassword(UserEntity user);
 
+    /**
+     * 检测邮箱是否存在
+     * @param email
+     * @return Boolean
+     */
     Boolean checkEmail(String email);
 
-
+    /**
+     * 根据邮箱获取用户信息
+     * @param email
+     * @return UserTo
+     */
     UserTo getUserByEmail(String email);
 
+    /**
+     * 检测邮箱格式是否正确
+     * @param email
+     * @return Boolean
+     */
     Boolean checkEmailFormat(String email);
 }
 

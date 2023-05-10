@@ -7,6 +7,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
+/**
+ * @Author: zhangtao
+ * @Date: 2023/3/27 20:39
+ */
 @SpringBootApplication
 @EnableDiscoveryClient
 @ComponentScan({"com.hives.common","com.hives.user"})
