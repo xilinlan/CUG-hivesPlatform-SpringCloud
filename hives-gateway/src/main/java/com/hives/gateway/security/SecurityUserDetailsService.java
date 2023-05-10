@@ -38,10 +38,8 @@ public class SecurityUserDetailsService implements ReactiveUserDetailsService {
 
     @Override
     public Mono<UserDetails> findByUsername(String username) {
-        System.out.println(username);
         UserTo user=userFeignService.UserByEmail(username);
         user.setPassword("{bcrypt}"+ user.getPassword());
-        System.out.println(user);
         //调用数据库根据用户名获取用户
 
         Collection<GrantedAuthority> authorities = new ArrayList<>();
