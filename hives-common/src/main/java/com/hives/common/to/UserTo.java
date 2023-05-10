@@ -69,6 +69,19 @@ public class UserTo{
      */
     private Integer followCount;
 
+    /**
+     * 背景图
+     */
+    private String background;
+
+    public String getBackground() {
+        return background;
+    }
+
+    public void setBackground(String background) {
+        this.background = background;
+    }
+
     public UserTo() {
     }
     public UserTo(String email, String password) {
