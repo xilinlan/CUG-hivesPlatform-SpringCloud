@@ -63,7 +63,7 @@ public class AuthenticationSuccessHandler extends WebFilterChainServerAuthentica
                 //maxAge默认-1 浏览器关闭cookie失效
                 redisTemplate.opsForValue().set(authentication.getName(), token, 1, TimeUnit.DAYS);
                 System.out.println(token+"  "+securityUserDetails.getUser());
-                redisTemplate.opsForValue().set(token,securityUserDetails.getUser(),1,TimeUnit.DAYS);
+                redisTemplate.opsForValue().set(token,securityUserDetails.getUser(),1,TimeUnit.HOURS);
             }else {
                 token=JWTUtils.creatToken(load,3600*24*180);
                 response.addCookie(ResponseCookie.from("token", token).maxAge(Duration.ofDays(rememberMe)).path("/").build());
