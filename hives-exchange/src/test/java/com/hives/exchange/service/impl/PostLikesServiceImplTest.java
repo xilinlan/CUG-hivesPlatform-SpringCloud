@@ -27,11 +27,11 @@ class PostLikesServiceImplTest {
 
     @Test
     @Transactional
-    void updatePostLikes() {
+    public void updatePostLikes() {
         PostLikesEntity like1 = postLikesService.isLike(3L, 9L);
         assertNull(like1);
 
-        postLikesService.updatePostLikes(3L,7L);
+        postLikesService.updatePostLikes(3L,45L);
         PostLikesEntity like2 = postLikesService.isLike(3L, 7L);
         assertNull(like2);
 
@@ -42,12 +42,16 @@ class PostLikesServiceImplTest {
 
     @Test
     @Transactional
-    void removePostLikesByPostId() {
+    public void removePostLikesByPostId() {
         postLikesService.removePostLikesByPostId(7L);
         List<PostLikesEntity> list = postLikesService.list(new QueryWrapper<PostLikesEntity>().eq("post_id", 7L));
         for (PostLikesEntity like:
              list) {
             assertEquals(like.getIsDeleted(),1);
         }
+        PostLikesEntity postLikes = postLikesService.getById(1L);
+        System.out.println(postLikes);
+        postLikes.setIsDeleted(0);
+        postLikesService.updateById(postLikes);
     }
 }
