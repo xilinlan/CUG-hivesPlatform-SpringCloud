@@ -24,13 +24,14 @@ import static org.junit.jupiter.api.Assertions.*;
  * @Description:
  */
 @SpringBootTest
+@Transactional
 class PostCollectsServiceImplTest {
     @Autowired
     private PostCollectsService postCollectsService;
 
     @Test
-    void isCollect() {
-        PostCollectsEntity collect1 = postCollectsService.isCollect(3L, 7L);
+    public void isCollect() {
+        PostCollectsEntity collect1 = postCollectsService.isCollect(3L, 45L);
         assertNotNull(collect1);
 
         PostCollectsEntity collect2 = postCollectsService.isCollect(3L, 8L);
@@ -42,7 +43,7 @@ class PostCollectsServiceImplTest {
 
     @Test
     @Transactional
-    void updateCollects() {
+    public void updateCollects() {
         PostCollectsEntity collect=postCollectsService.getById(1L);
         PostCollectsEntity collect2=new PostCollectsEntity();
         BeanUtils.copyProperties(collect,collect2);
@@ -65,7 +66,6 @@ class PostCollectsServiceImplTest {
     }
 
     @Test
-    @Transactional
     void removePostCollectsByPostId() {
         postCollectsService.removePostCollectsByPostId(7L);
         List<PostCollectsEntity> list = postCollectsService.list(new QueryWrapper<PostCollectsEntity>().eq("post_id", 7));
@@ -73,5 +73,8 @@ class PostCollectsServiceImplTest {
              list) {
             assertEquals(collect.getIsDeleted(),1);
         }
+        PostCollectsEntity postCollects = postCollectsService.getById(1L);
+        postCollects.setIsDeleted(0);
+        postCollectsService.updateById(postCollects);
     }
 }
